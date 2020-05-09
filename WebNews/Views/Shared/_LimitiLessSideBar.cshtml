@@ -1,0 +1,76 @@
+﻿<ul class="nav nav-sidebar" data-nav-type="accordion">
+
+    <!-- Main -->
+    <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Info</div> <i class="icon-menu" title="Main"></i></li>
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="Dashboard" asp-area="Panel" class="nav-link">
+            <i class="icon-home4"></i>
+            <span>
+                Dashboard
+            </span>
+        </a>
+    </li>
+
+    <!-- Layout -->
+    <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Content</div> <i class="icon-menu" title="Layout options"></i></li>
+
+
+
+
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>News</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+            <li class="nav-item"><a asp-action="ListIndex" asp-controller="News" asp-area="Panel" class="nav-link">List Table List</a></li>
+            <li class="nav-item"><a asp-action="CardIndex" asp-controller="News" asp-area="Panel" class="nav-link">List Card List</a></li>
+            <li class="nav-item"><a asp-action="Create" asp-controller="News" asp-area="Panel" class="nav-link">Create News</a></li>
+        </ul>
+    </li>
+
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Galleries</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+            <li class="nav-item"><a asp-action="listindex" asp-controller="Galleries" asp-area="Panel" class="nav-link">Table List</a></li>
+            <li class="nav-item"><a asp-action="cardindex" asp-controller="Galleries" asp-area="Panel" class="nav-link">Card List</a></li>
+            <li class="nav-item"><a asp-action="Create" asp-controller="Galleries" asp-area="Panel" class="nav-link">Create Gallery</a></li>
+        </ul>
+    </li>
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Articles</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+            <li class="nav-item"><a asp-action="ListIndex" asp-controller="Articles" asp-area="Panel" class="nav-link">Table List</a></li>
+            <li class="nav-item">
+            <a asp-action="CardIndex" asp-controller="Articles" asp-area="Panel" class="nav-link">Card List</a></li>
+            <li class="nav-item"><a asp-action="Create" asp-controller="Articles" asp-area="Panel" class="nav-link">Create Artices</a></li>
+            <li class="nav-item"><a asp-action="Create" asp-controller="Articles" asp-area="Panel" class="nav-link">Incoming Articles</a></li>
+        </ul>
+    </li>
+
+
+
+
+
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-stack2"></i> <span>Sections</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Page layouts">
+
+            <li class="nav-item nav-item-submenu">
+                <a href="layout_fixed_sidebar_custom.html" class="nav-link">Category</a>
+                <ul class="nav nav-group-sub">
+                    <li class="nav-item"><a asp-action="Index" asp-controller="Categories" asp-area="Panel" class="nav-link">List</a></li>
+                    <li class="nav-item"><a asp-action="Create" asp-controller="Categories" asp-area="Panel" class="nav-link">Create</a></li>
+                </ul>
+            </li>
+
+
+
+            <li class="nav-item"><a href="layout_fixed_navbar.html" class="nav-link">Fixed navbar</a></li>
+
+
+
+        </ul>
+    </li>
+</ul>

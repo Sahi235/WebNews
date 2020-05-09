@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/content_cards_content.js"></script>
+}
+
+@section css{
+    <script src="~/LimitlessAssets/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/form_select2.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/inputs/touchspin.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/form_input_groups.js"></script>
+
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="form-group">
+    <label class="d-block">Select News View</label>
+    <select id="SelectLayout" class="form-control select-fixed-single" data-fouc>
+        <option value="1">Table List</option>
+        <option value="2">Card Layout</option>
+    </select>
+    <br />
+    <label class="col-form-label col-lg-1">Take</label>
+    <input type="text" id="take" value="50" placeholder="10" class="form-control touchspin-empty col-md-1">
+    <label class="col-form-label col-lg-1">Skip</label>
+    <input type="text" id="skip" value="0" placeholder="0" class="form-control touchspin-empty col-md-1">
+</div>
+
+<div id="DisplayedList">
+
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("select#SelectLayout").ready(function () {
+                var id = $("select#SelectLayout").children("option:selected").val();
+                if (id == 1) {
+                    $("#DisplayedList").load('/panel/articles/listindex');
+                }
+                if (id == 2) {
+                    $("#DisplayedList").load('/panel/articles/cardindex/');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("select#SelectLayout").change(function () {
+                var id = $("select#SelectLayout").children("option:selected").val();
+                var take = $("#take").val();
+                var skip = $("#skip").val();
+                if (take == null) {
+                    take = 50;
+                }
+                if (skip == null) {
+                    skip == 0;
+                }
+                if (id == 1) {
+                    $("#DisplayedList").load('/panel/articles/listindex/' + take + '/' + skip);
+                }
+                if (id == 2) {
+                    $("#DisplayedList").load('/panel/articles/cardindex/' + take + '/' + skip);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#take").change(function () {
+                var id = $("select#SelectLayout").children("option:selected").val();
+                var take = $("#take").val();
+                var skip = $("#skip").val();
+                if (id == null || id == undefined) {
+                    id = 1;
+                }
+                if (id == 1) {
+                    $("#DisplayedList").load('/panel/articles/listindex/' + take + '/' + skip);
+                }
+                if (id == 2) {
+                    $("#DisplayedList").load('/panel/articles/cardindex/' + take + '/' + skip);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#skip").change(function () {
+                var id = $("select#SelectLayout").children("option:selected").val();
+                var take = $("#take").val();
+                var skip = $("#skip").val();
+                if (id == null || id == undefined) {
+                    id = 1;
+                }
+                if (id == 1) {
+                    $("#DisplayedList").load('/panel/articles/listindex/' + take + '/' + skip);
+                }
+                if (id == 2) {
+                    $("#DisplayedList").load('/panel/articles/cardindex/' + take + '/' + skip);
+                }
+            });
+        });
+    </script>
+}

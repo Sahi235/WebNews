@@ -1,0 +1,99 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<Article>;
+@{
+    ViewData["Title"] = "CardIndex";
+    Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+    string photoPath = null;
+}
+@section css{
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/content_cards_content.js"></script>
+
+}
+
+<nav>
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>
+
+<div class="row">
+
+    @foreach (var news in Model)
+    {
+        <div class="col-md-4">
+            @{
+                photoPath = "/images/Article/" + news.MainImage;
+            }
+            <div class="card">
+                <div class="card-img-actions">
+                    <img class="img-fluid" src="@photoPath" asp-append-version="true" alt="@news.Title">
+                    <div class="card-img-actions-overlay">
+                        <a asp-action="Edit" asp-controller="Articles" asp-area="Panel" asp-route-id="@news.Id" class="btn btn-outline bg-white text-white border-white border-2" data-popup="lightbox">
+                            Edit
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="#modal_theme_danger-@news.Id" class="btn btn-outline bg-white text-white border-white border-2 ml-2">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-transparent d-flex justify-content-between border-top-0 pb-0">
+                    <span class="text-muted">@news.PublishedDate.ToString("dddd dd MM yyyy")</span>
+
+                    <ul class="list-inline list-inline-condensed mb-0">
+                        <li class="list-inline-item">
+                            <a href="#" class="text-indigo-400"><i class="icon-thumbs-up2"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-danger"><i class="icon-thumbs-down2"></i></a>
+                        </li>
+                        <li class="list-inline-item ml-3">
+                            <a href="#" class="text-muted"><i class="icon-flag4"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+                    <h6 class="card-title font-weight-semibold">@news.Title</h6>
+                    <p class="card-text">@news.ShortBody</p>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="#" class="text-default"><i class="icon-bubble2 mr-2"></i> Comment</a>
+                    <span class="text-muted"><i class="icon-eye mr-2"></i> @news.ViewCount</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="modal_theme_danger-@news.Id" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h6 class="modal-title">Delete!</h6>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h6 class="font-weight-semibold">For your information!</h6>
+                        <p>You are about to delet this news, Remember that if you delete you can restore it from deleted post page. Every deleted news can be restored till 30 days after being deleted. But deleted news can not be shown to users.</p>
+
+                        <hr>
+
+                        <h6 class="font-weight-semibold">Confirmation</h6>
+                        <p>Are you sure you want to delete <code>@news.Title</code>?</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+                        @*<button type="button" class="btn bg-danger">Delete</button>*@
+                        <form asp-action="Delete" asp-controller="Articles" asp-area="Panel" asp-route-id="@news.Id" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+</div>

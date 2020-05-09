@@ -1,0 +1,260 @@
+﻿@model BlogDetailsVM;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string photoPath = null;
+    int counter;
+}
+<div class="blog-area section-padding-0-80">
+    <div class="container">
+        <div class="row" style="padding-top: 35px;">
+            <div class="col-12 col-lg-8">
+                <div class="blog-posts-area">
+
+                    <!-- Single Featured Post -->
+                    <div class="single-blog-post featured-post single-post">
+                        <div class="post-thumb">
+                            @{photoPath = "/images/News/" + Model.News.MainImage;}
+                            <a href="#"><img src="@photoPath" asp-append-version="true" alt="@Model.News.Title"></a>
+                        </div>
+                        <div class="post-data">
+                            @{counter = Model.News.Categories.Count();}
+                            @foreach (var cate in Model.News.Categories)
+                            {
+                                <a href="#" style="display:inline;" class="post-catagory">@cate.Category.Name </a>
+                                if (counter > 1)
+                                {
+                                    <span style="display:inline;"> </span>
+                                }
+                            }
+                            <a href="#" class="post-title">
+                                <h6>@Model.News.Title</h6>
+                            </a>
+                            <div class="post-meta">
+                                <p class="post-author">By <a href="#">Christinne Williams</a></p>
+                                <p>@Html.Raw(Model.News.Body)</p>
+                                <div class="newspaper-post-like d-flex align-items-center justify-content-between">
+                                    <!-- Tags -->
+                                    <div class="newspaper-tags d-flex">
+                                        <span>Tags:</span>
+                                        <ul class="d-flex">
+                                            @{counter = Model.News.Tags.Count();}
+                                            @foreach (var tag in Model.News.Tags)
+                                            {
+                                                if (counter > 1)
+                                                {
+                                                    <li><a href="#">@tag.Tag.Name ,</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="#">@tag.Tag.Name</a></li>
+                                                }
+                                                counter--;
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    <!-- Post Like & Post Comment -->
+                                    <div class="d-flex align-items-center post-like--comments">
+                                        <a href="#" class="post-like"><img src="~/Template/img/core-img/like.png" alt="@Model.News.Title"> <span>@Model.News.Likes</span></a>
+                                        <a href="#" class="post-comment"><img src="~/Template/img/core-img/chat.png" alt="@Model.News.Title"> <span>@Model.News.Comments.Count()</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Author -->
+                    <div class="blog-post-author d-flex">
+                        <div class="author-thumbnail">
+                            <img src="img/bg-img/32.jpg" alt="">
+                        </div>
+                        <div class="author-info">
+                            <a href="#" class="author-name">James Smith, <span>The Author</span></a>
+                            <p>Donec turpis erat, scelerisque id euismod sit amet, fermentum vel dolor. Nulla facilisi. Sed pellen tesque lectus et accu msan aliquam. Fusce lobortis cursus quam, id mattis sapien.</p>
+                        </div>
+                    </div>
+
+                    <div class="pager d-flex align-items-center justify-content-between">
+                        <div class="prev">
+                            <a href="#" class="active"><i class="fa fa-angle-left"></i> previous</a>
+                        </div>
+                        <div class="next">
+                            <a href="#">Next <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="section-heading">
+                        <h6>Related</h6>
+                    </div>
+
+                    <div class="row">
+                        <!-- Single Post -->
+                        @foreach (var news in Model.RelatedNews)
+                        {
+                            <div class="col-12 col-md-6">
+                                <div class="single-blog-post style-3 mb-80">
+                                    <div class="post-thumb">
+                                        @{photoPath = "/images/News/" + news.MainImage;}
+                                        <a href="#"><img src="@photoPath" asp-append-version="true" alt="@news.Title"></a>
+                                    </div>
+                                    <div class="post-data">
+                                        @{counter = news.Categories.Count();}
+                                        @foreach (var cate in Model.News.Categories)
+                                        {
+                                            <a href="#" style="display:inline;" class="post-catagory">@cate.Category.Name </a>
+                                            if (counter > 1)
+                                            {
+                                                <span style="display:inline;"> </span>
+                                            }
+                                            counter--;
+                                        }
+                                        <a href="#" class="post-title">
+                                            <h6>@news.Title</h6>
+                                        </a>
+                                        <div class="post-meta d-flex align-items-center">
+                                            <a href="#" class="post-like"><img src="~/Template/img/core-img/like.png" alt="@news.Title"> <span>@news.Likes</span></a>
+                                            <a href="#" class="post-comment"><img src="~/Template/img/core-img/chat.png" alt="@news.Title"> <span>@news.Comments.Count()</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+
+                    <!-- Comment Area Start -->
+                    <div class="comment_area clearfix">
+                        <h5 class="title">Comments: @Model.News.Comments.Count()</h5>
+
+                        <ol>
+                            @foreach (var comment in Model.News.Comments)
+                            {
+                                <li class="single_comment_area">
+                                    <!-- Comment Content -->
+                                    <div class="comment-content d-flex">
+                                        <!-- Comment Author -->
+                                        <div class="comment-author">
+                                            <img src="~/Template/img/bg-img/32.jpg" alt="author">
+                                        </div>
+                                        <!-- Comment Meta -->
+                                        <div class="comment-meta">
+                                            <a href="#" class="post-author">@comment.Name</a>
+                                            <a href="#" class="post-date">@comment.PublishedDate.ToString("dddd dd MM yyyy")</a>
+                                            <p>@comment.Description</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                        </ol>
+                    </div>
+
+                    <div class="post-a-comment-area section-padding-80-0">
+                        <h4>Leave a comment</h4>
+
+                        <!-- Reply Form -->
+                        <div class="contact-form-area">
+                            <form method="post" enctype="multipart/form-data" asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@Model.News.SeoUrl">
+                                <div class="row">
+                                    <div class="col-12 col-lg-6">
+                                        <input required type="text" class="form-control" name="Name" id="name" placeholder="Name*">
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <input required type="email" class="form-control" name="Email" id="email" placeholder="Email*">
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea required name="Description" class="form-control" id="message" cols="30" rows="10" placeholder="Message"></textarea>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button class="btn newspaper-btn mt-30 w-100" type="submit">Submit Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="blog-sidebar-area">
+
+                    <!-- Latest Posts Widget -->
+                    <div class="latest-posts-widget mb-50">
+
+                        <!-- Single Featured Post -->
+                        @foreach (var news in Model.RandomNews)
+                        {
+                            <div class="single-blog-post small-featured-post d-flex">
+                                <div class="post-thumb">
+                                    @{photoPath = "/images/News/" + news.MainImage;}
+                                    <a asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@news.SeoUrl"><img src="@photoPath" asp-append-version="true" alt="@news.Title"></a>
+                                </div>
+                                <div class="post-data">
+                                    <a href="#" class="post-catagory">Finance</a>
+                                    <div class="post-meta">
+                                        <a asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@news.SeoUrl" class="post-title">
+                                            <h6>@news.Title</h6>
+                                        </a>
+                                        <p class="post-date"><span>@news.PublishedDate.ToString("hh:mm")</span> | <span>@news.PublishedDate.ToString("MMM dd")</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Popular News Widget -->
+                    <div class="popular-news-widget mb-50">
+                        <h3>5 Most Popular News</h3>
+
+                        <!-- Single Popular Blog -->
+                        @{counter = 1;}
+                        @foreach (var newss in Model.PopularNews)
+                        {
+                            <div class="single-popular-post">
+                                <a asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@newss.SeoUrl">
+                                    <h6><span>@counter-</span>@newss.Title</h6>
+                                </a>
+                                <p>@newss.PublishedDate.ToString("dddd dd MM yyyy")</p>
+                            </div>
+                            counter++;
+                        }
+                    </div>
+
+                    <!-- Newsletter Widget -->
+                    @*<div class="newsletter-widget mb-50">
+                            <h4>Newsletter</h4>
+                            <p>Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+                            <form action="#" method="post">
+                                <input type="text" name="text" placeholder="Name">
+                                <input type="email" name="email" placeholder="Email">
+                                <button type="submit" class="btn w-100">Subscribe</button>
+                            </form>
+                        </div>*@
+
+                    <!-- Latest Comments Widget -->
+                    <div class="latest-comments-widget">
+                        <h3>Latest Comments</h3>
+
+                        <!-- Single Comments -->
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div class="single-comments d-flex">
+                                <div class="comments-thumbnail mr-15">
+                                    <img src="~/Template/img/bg-img/29.jpg" alt="">
+                                </div>
+                                <div class="comments-text">
+                                    <a asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@comment.News.SeoUrl">@comment.Name <span>on</span> @comment.News.Title</a>
+                                    <p>@comment.PublishedDate.ToString("hh:mm"), @comment.PublishedDate.ToString("MM dd yyyy")</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Blog Area End ##### -->

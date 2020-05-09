@@ -1,0 +1,61 @@
+﻿@model List<Category>
+
+@{
+    Layout = null;
+}
+
+<ul>
+    <li class="active"><a asp-action="Index" asp-controller="Home">Home</a></li>
+    <li>
+        <a href="#">Pages</a>
+        <ul class="dropdown">
+            <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+            <li><a href="catagories-post.html">Catagories</a></li>
+            <li><a href="single-post.html">Single Articles</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li>
+                <a href="#">Dropdown</a>
+                <ul class="dropdown">
+                    <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                    <li><a href="catagories-post.html">Catagories</a></li>
+                    <li><a href="single-post.html">Single Articles</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Mega Menu</a>
+        <div class="megamenu">
+            <ul class="single-mega cn-col-4">
+                @*<li class="title">News</li>*@
+                @for (int i = 0; i < 6; i++)
+                {
+                    <li><a asp-action="CategoryNews" asp-controller="Home" asp-route-name="@Model[i].Name">@Model[i].Name</a></li>
+                }
+
+            </ul>
+            <ul class="single-mega cn-col-4">
+                @for (int i = 6; i < 12; i++)
+                {
+                    <li><a asp-action="CategoryNews" asp-controller="Home" asp-route-name="@Model[i].Name">@Model[i].Name</a></li>
+                }
+            </ul>
+            <ul class="single-mega cn-col-4">
+                @*<li class="title">Galleries</li>*@
+                @for (int i = 12; i < 18; i++)
+                {
+                    <li><a asp-action="CategoryNews" asp-controller="Home" asp-route-name="@Model[i].Name">@Model[i].Name</a></li>
+                }
+            </ul>
+
+        </div>
+    </li>
+    @for (int i = 0; i < 10; i++)
+    {
+        <li><a asp-action="CategoryNews" asp-controller="Home" asp-route-name="@Model[i].Name">@Model[i].Name</a></li>
+    }
+    <li><a href="contact.html">Contact</a></li>
+</ul>
