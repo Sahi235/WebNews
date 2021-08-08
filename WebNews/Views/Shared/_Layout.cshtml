@@ -16,6 +16,27 @@
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="~/Template/style.css">
 
+    @*<link href="~/LimitlessAssets/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="~/LimitlessAssets/assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+        <link href="~/LimitlessAssets/assets/css/layout.min.css" rel="stylesheet" type="text/css">
+        <link href="~/LimitlessAssets/assets/css/components.min.css" rel="stylesheet" type="text/css">
+        <link href="~/LimitlessAssets/assets/css/colors.min.css" rel="stylesheet" type="text/css">*@
+
+    <script src="~/LimitlessAssets/global_assets/js/main/jquery.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/main/bootstrap.bundle.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/loaders/blockui.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/main/bootstrap.bundle.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/loaders/blockui.min.js"></script>
+
+
+    <!-- /core JS files -->
+    <!-- Theme JS files -->
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+
+    <script src="assets/js/app.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/login_validation.js"></script>
+
 </head>
 
 <body>
@@ -36,14 +57,42 @@
                             <!-- Login Search Area -->
                             <div class="login-search-area d-flex align-items-center">
                                 <!-- Login -->
-                                <div class="login d-flex">
-                                    <a href="#">Login</a>
-                                    <a href="#">Register</a>
-                                </div>
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    if (User.IsInRole("Admin") || User.IsInRole("Author"))
+                                    {
+                                        <div class="login d-flex">
+                                            <a asp-action="Index" asp-controller="Dashboard" asp-area="Panel">Panel</a>
+                                            <form id="my_form2" asp-action="SignOut" asp-controller="Accounts" method="post">
+                                                @*<button type="submit">
+                                                    SignOut
+                                                </button>*@
+                                                <a href="javascript:{}" onclick="document.getElementById('my_form2').submit();">Sign Out</a>
+                                            </form>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <form id="my_form" asp-action="SignOut" asp-controller="Accounts" method="post">
+                                            @*<button style="outline-style: none; color:white; border: hidden; background: red;" type="submit">
+                                                SignOut
+                                            </button>*@
+                                            <a href="javascript:{}" onclick="document.getElementById('my_form').submit();">Sign Out</a>
+                                        </form>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="login d-flex">
+                                        <a asp-action="Login" asp-controller="Accounts">Login</a>
+                                        <a asp-action="Register" asp-controller="Accounts">Register</a>
+                                    </div>
+                                }
                                 <!-- Search Form -->
                                 <div class="search-form">
-                                    <form action="#" method="post">
-                                        <input type="search" name="search" class="form-control" placeholder="Search">
+                                    <form asp-action="Search" asp-controller="Home" asp-area="@null" method="get">
+                                        <input type="search" name="searchString" class="form-control" placeholder="Search">
                                         <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                                     </form>
                                 </div>
@@ -81,7 +130,7 @@
 
                             <!-- Nav Start -->
                             <div class="classynav">
-                                @await Component.InvokeAsync("Categories") 
+                                @await Component.InvokeAsync("Categories")
                             </div>
                             <!-- Nav End -->
                         </div>
@@ -91,7 +140,7 @@
         </div>
     </header>
 
-        @*<div class="hero-area">
+    @*<div class="hero-area">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-12 col-lg-8">
@@ -161,7 +210,7 @@
                         <div class="footer-widget-area mt-80">
                             <!-- Footer Logo -->
                             <div class="footer-logo">
-                                <a href="index.html"><img src="~/Template/img/core-img/logo.png" alt=""></a>
+                                <a asp-controller="Home" asp-action="Index"><img src="~/Template/img/core-img/logo.png" alt=""></a>
                             </div>
                             <!-- List -->
                             <ul class="list">
@@ -262,6 +311,8 @@
             </div>
         </div>
     </footer>
+
+
     <mini-profiler />
     <!-- ##### Footer Area Start ##### -->
     <!-- ##### All Javascript Files ##### -->

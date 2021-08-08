@@ -1,0 +1,49 @@
+﻿@model List<ApplicationRole>;
+@{
+    ViewData["Title"] = "RolesList";
+    Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Horizontal borders</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        Example of <code>horizontal</code> table borders. This is a default table border style attached to <code>.table</code> class. All borders have the same grey color and style, table itself doesn't have a border, but you can add this border using <code>.table-framed</code> class added to the table with <code>.table</code> class.
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Role Name</th>
+                    <th>Number of Role Admins</th>
+                    <th>Number of Role users</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@(i+1)</td>
+                        <td>@Model[i].Name</td>
+                        <td>0</td>
+                        <td>@Model[i].Users.Count()</td>
+                        <td><a asp-action="Edit" asp-controller="Roles" asp-area="Panel" asp-route-name="@Model[i].Name">Edit</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -147,6 +147,26 @@
                                         </div>
                                     </div>
                                 </li>
+                                foreach (var response in comment.Answers)
+                                {
+                                    <ol class="children">
+                                        <li class="single_comment_area">
+                                            <!-- Comment Content -->
+                                            <div class="comment-content d-flex">
+                                                <!-- Comment Author -->
+                                                <div class="comment-author">
+                                                    <img src="~/Template/img/bg-img/31.jpg" alt="author">
+                                                </div>
+                                                <!-- Comment Meta -->
+                                                <div class="comment-meta">
+                                                    <a href="#" class="post-author">@response.Name</a>
+                                                    <a href="#" class="post-date">@response.PublishedDate.Humanize()</a>
+                                                    <p>@response.Body</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                }
                             }
 
                         </ol>
@@ -160,11 +180,21 @@
                             <form method="post" enctype="multipart/form-data" asp-action="NewsDetails" asp-controller="Home" asp-route-seoUrl="@Model.News.SeoUrl">
                                 <div class="row">
                                     <div class="col-12 col-lg-6">
-                                        <input required type="text" class="form-control" name="Name" id="name" placeholder="Name*">
+                                        @if (!signInManager.IsSignedIn(User))
+                                        {
+                                            <input required type="text" class="form-control" name="Name" id="name" placeholder="Name*">
+                                        }
+                                        else
+                                        {
+                                            <input disabled type="text" class="form-control" value="@User.Identity.Name" name="Name" id="name" placeholder="Name*">
+                                        }
                                     </div>
-                                    <div class="col-12 col-lg-6">
-                                        <input required type="email" class="form-control" name="Email" id="email" placeholder="Email*">
-                                    </div>
+                                    @if (!signInManager.IsSignedIn(User))
+                                    {
+                                        <div class="col-12 col-lg-6">
+                                            <input required type="email" class="form-control" name="Email" id="email" placeholder="Email*">
+                                        </div>
+                                    }
                                     <div class="col-12">
                                         <textarea required name="Description" class="form-control" id="message" cols="30" rows="10" placeholder="Message"></textarea>
                                     </div>

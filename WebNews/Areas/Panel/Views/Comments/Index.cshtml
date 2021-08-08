@@ -1,66 +1,168 @@
-﻿@model IEnumerable<WebNews.Models.Comment>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<WebNews.Models.Comment>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+
+}
+@section css
+{
+    <script src="~/LimitlessAssets/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/plugins/ui/fullcalendar/core/main.min.js"></script>
+
+
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/user_pages_profile.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_charts/echarts/light/bars/tornado_negative_stack.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_charts/pages/profile/light/balance_stats.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_charts/pages/profile/light/available_hours.js"></script>
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublishedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsApproved)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.News)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Video)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsApproved)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.News.SeoUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Video.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (ViewBag.Info != null)
+{
+    <div class="alert alert-primary alert-rounded alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        <span class="font-weight-semibold"></span> @ViewBag.Info
+    </div>
 }
-    </tbody>
-</table>
+
+<!-- Basic datatable -->
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Basic datatable</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        All<code>Comments</code>
+    </div>
+
+    <table class="table datatable-basic">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Post</th>
+                <th>Comment</th>
+                <th>DOB</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var comment in Model)
+            {
+                <tr>
+                    <td>@comment.Name</td>
+                    @if (comment.News.Title.Length > 20)
+                    {
+                        <td>@comment.News.Title.Substring(0, 19)</td>
+                    }
+                    else
+                    {
+                        <td>@comment.News.Title</td>
+                    }
+                    @if (comment.Description.Length > 50)
+                    {
+                        <td>@comment.Description.Substring(0, 50)</td>
+                    }
+                    else
+                    {
+                        <td>@comment.Description</td>
+                    }
+                    <td>@comment.PublishedDate.Humanize()</td>
+                    @if (comment.IsApproved == true)
+                    {
+                        <td><span id="commendicon-@comment.Id" class="badge badge-success">Approved</span></td>
+                    }
+                    else
+                    {
+                        <td><span id="commendicon-@comment.Id" class="badge badge-danger">unapproved</span></td>
+                    }
+                    <td class="text-center">
+                        <div class="list-icons">
+                            <div class="dropdown">
+                                <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                    <i class="icon-menu9"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    @if (comment.IsApproved == true)
+                                    {
+                                        <a href="#" id="Unapprove-@comment.Id" class="dropdown-item"><i id="commentoperation-@comment.Id" class="icon-cross2"></i> Uapprove</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" id="Approve-@comment.Id" class="dropdown-item"><i id="commentoperation-@comment.Id" class="icon-plus3"></i>Approve</a>
+                                    }
+
+                                    <a href="#" class="dropdown-item"><i class="icon-history"></i> Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+
+
+</div>
+<!-- /basic datatable -->
+
+
+@section Scripts{
+    <script src="~/lib/jquery/jquery.js"></script>
+
+    @foreach (var comment in Model)
+    {
+
+        <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#Unapprove-@comment.Id").click(function () {
+                {
+                    $.post("https://localhost:44310/panel/comments/UnapproveCommentFromDashboard/@comment.Id")
+
+                    $('#commendicon-@comment.Id').text('Unapproved');
+                    $('#commendicon-@comment.Id').removeClass('badge-success');
+                    $('#commendicon-@comment.Id').addClass('badge-danger');
+
+                }})
+        })
+
+        </script>
+
+    }
+
+    @foreach (var comment in Model)
+    {
+        <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#Approve-@comment.Id").click(function () {
+                {
+                    $.post("https://localhost:44310/panel/comments/ApproveCommentFromDashboard/@comment.Id")
+
+                    $('#commentoperation-@comment.Id').removeAttr('class');
+                    $('#commentoperation-@comment.Id').attr('class', 'icon-plus3');
+                    $('#commendicon-@comment.Id').text('Approved');
+                    $('#commendicon-@comment.Id').removeClass('badge-danger');
+                    $('#commendicon-@comment.Id').addClass('badge-success');
+                }})
+        })
+
+        </script>
+
+
+    }
+
+}

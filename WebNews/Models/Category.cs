@@ -13,5 +13,6 @@ namespace WebNews.Models
         public virtual ICollection<GalleryCategory> Galleries { get; set; } = new HashSet<GalleryCategory>();
         public virtual ICollection<ArticleCategory> Articles { get; set; } = new HashSet<ArticleCategory>();
         public virtual ICollection<VideoCategory> Videos { get; set; } = new HashSet<VideoCategory>();
+        public virtual ICollection<FavouriteCateUser> Users { get; set; } = new HashSet<FavouriteCateUser>();
     }
 }

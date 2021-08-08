@@ -12,6 +12,8 @@ namespace WebNews.Models
         public const string GalleryFolder = "Gallery";
         public const string VideoImagesFolder = "VideoImages";
         public const string VideoFolder = "Video";
+        public const string UserFolder = "UsersProfile";
+        public const string AttachmentFolder = "AttachmentFolder";
 
     }
 }

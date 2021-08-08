@@ -1,0 +1,84 @@
+﻿@model WebNews.Areas.Panel.ViewModels.Emails.ComposeEmailsVM;
+@{
+	ViewData["Title"] = "Compose";
+	Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+}
+
+@section css{
+	<script src="~/lib/jquery/jquery.min.js"></script>
+	<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+	<!-- Theme JS files -->
+	<script src="~/LimitlessAssets/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
+	<script src="~/LimitlessAssets/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+	<script src="~/LimitlessAssets/global_assets/js/demo_pages/editor_summernote.js"></script>
+	<!-- Theme JS files -->
+	<script src="~/LimitlessAssets/global_assets/js/plugins/editors/ckeditor/ckeditor.js"></script>
+	<script src="~/LimitlessAssets/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="~/LimitlessAssets/global_assets/js/demo_pages/editor_ckeditor_default.js"></script>
+}
+
+<div class="row">
+	@await Component.InvokeAsync("LeftNavEmails") 
+	<!-- /.col -->
+	<div class="col-md-9">
+		<div class="card card-primary card-outline">
+			<div class="card-header">
+				<h3 class="card-title">Compose New Message</h3>
+				<div asp-validation-summary="All" class="text-danger"></div>
+			</div>
+			<!-- /.card-header -->
+			<form asp-action="Compose" asp-area="Panel" asp-controller="Emails" enctype="multipart/form-data" method="post">
+				<div class="card-body">
+					<div class="form-group">
+						<input class="form-control" asp-for="@Model.Receiver" placeholder="To:">
+						<span asp-validation-for="@Model.Receiver" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<input class="form-control" asp-for="@Model.Subject" placeholder="Subject:">
+						<span asp-validation-for="@Model.Subject" class="text-danger"></span>
+
+					</div>
+					<div class="form-group">
+
+
+
+						<textarea asp-for="@Model.Body" id="editor-full" rows="4" cols="4">
+						</textarea>
+						<span asp-validation-for="@Model.Body" class="text-danger"></span>
+
+
+
+					</div>
+					<div class="form-group">
+						<div class="btn btn-primary btn-file">
+							<i class="fas fa-paperclip"></i> Attachment
+							<input asp-for="@Model.Attachments" multiple>
+							<span asp-validation-for="@Model.Attachments" class="text-danger"></span>
+
+						</div>
+						<p class="help-block">Max. 32MB</p>
+					</div>
+				</div>
+				<!-- /.card-body -->
+				<div class="card-footer">
+					<div class="float-right">
+						<button type="button" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Draft</button>
+						<button type="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Send</button>
+					</div>
+					<button type="reset" class="btn btn-default"><i class="fas fa-times"></i> Discard</button>
+				</div>
+			</form>
+			<!-- /.card-footer -->
+		</div>
+		<!-- /.card -->
+	</div>
+	<!-- /.col -->
+</div>
+<!-- /.row -->
+
+
+@section Scripts{
+
+
+}

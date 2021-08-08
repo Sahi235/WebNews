@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebNews.Models;
 
 namespace WebNews.Data
@@ -25,7 +21,7 @@ namespace WebNews.Data
         {
 
         }
-
+        #region Tables
         public DbSet<News> News { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<NewsCategory> NewsCategories { get; set; }
@@ -49,11 +45,33 @@ namespace WebNews.Data
         public DbSet<PaginationSetting> PaginationSettings { get; set; }
         public DbSet<CommentAnswer> CommentAnswers { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
+        public DbSet<Culture> Cultures { get; set; }
+        public DbSet<Visitor> Visitors { get; set; }
+        public DbSet<VisitorHistory> VisitorHistories { get; set; }
+        public DbSet<FavouriteCateUser> UserFavorites { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Email> Emails { get; set; }
+        public DbSet<EmailAnswer> EmailAnswers { get; set; }
+        public DbSet<Attachments> Attachments { get; set; }
 
-
+        //public DbSet<UserFriend> UserFriends { get; set; }
+        #endregion
+        #region Tables Logic
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<FavouriteCateUser>()
+                            .HasKey(c => new { c.UserId, c.CategoryId });
+            builder.Entity<FavouriteCateUser>()
+                            .HasOne(c => c.User)
+                                .WithMany(c => c.FavouriteCategories)
+                                    .HasForeignKey(c => c.UserId);
+            builder.Entity<FavouriteCateUser>()
+                            .HasOne(c => c.Category)
+                                .WithMany(c => c.Users)
+                                    .HasForeignKey(c => c.CategoryId);
+
 
 
             builder.Entity<ApplicationUserRole>()
@@ -231,7 +249,17 @@ namespace WebNews.Data
                             .WithMany(c => c.Videos)
                                 .HasForeignKey(c => c.UserId)
                                     .IsRequired(false);
+
+            builder.Entity<Email>()
+                        .HasOne(c => c.Sender)
+                            .WithMany(c => c.SentMessages)
+                                .HasForeignKey(c => c.SenderId);
+            builder.Entity<Email>()
+                        .HasOne(c => c.Receiver)
+                            .WithMany(c => c.ReceivedEmail)
+                                .HasForeignKey(c => c.ReceiverId);
         }
+        #endregion
 
     }
 

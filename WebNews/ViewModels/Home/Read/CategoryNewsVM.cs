@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ReflectionIT;
 using WebNews.Models;
+using WebNews.ViewModels.Accounts;
 
 namespace WebNews.ViewModels.Home.Read
 {

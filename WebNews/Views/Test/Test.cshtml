@@ -1,17 +1,13 @@
-﻿
+﻿@model List<News>;
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Test</title>
-</head>
-
-<h1>@ViewBag.ip</h1>
-<body>
-</body>
-</html>
+@foreach (var n in Model)
+{
+    <h1>@n.Id</h1>
+    <h1>@n.Title</h1>
+    <h1>@n.SeoUrl</h1>
+    <hr />
+}
+<mini-profiler />

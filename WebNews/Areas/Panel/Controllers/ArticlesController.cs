@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,15 @@ namespace WebNews.Areas.Panel.Controllers
     {
         private readonly DatabaseContext _context;
         private readonly IImageHandler _imageHandler;
-
+        private readonly UserManager<ApplicationUser> userManager;
 
         public ArticlesController(DatabaseContext context,
-                                  IImageHandler imageHandler)
+                                  IImageHandler imageHandler,
+                                  UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _imageHandler = imageHandler;
+            this.userManager = userManager;
         }
 
         // GET: Panel/Articles
@@ -180,6 +183,9 @@ namespace WebNews.Areas.Panel.Controllers
                     }
                 }
                 article.SeoUrl = newSeoUrl;
+                var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                article.User = user;
+                article.UserId = user.Id;
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ListIndex));

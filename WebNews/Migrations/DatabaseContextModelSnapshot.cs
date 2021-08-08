@@ -15,7 +15,7 @@ namespace WebNews.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -108,6 +108,29 @@ namespace WebNews.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebNews.Models.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ActivityDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Activities");
+                });
+
             modelBuilder.Entity("WebNews.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -146,8 +169,20 @@ namespace WebNews.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AdressOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdressTwo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -157,6 +192,9 @@ namespace WebNews.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullAdress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -165,6 +203,9 @@ namespace WebNews.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -183,8 +224,14 @@ namespace WebNews.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SignUpDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -192,6 +239,9 @@ namespace WebNews.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -309,6 +359,29 @@ namespace WebNews.Migrations
                     b.ToTable("ArticleTags");
                 });
 
+            modelBuilder.Entity("WebNews.Models.Attachments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AttachmentUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailId");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("WebNews.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -334,6 +407,10 @@ namespace WebNews.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
                     b.Property<int?>("GalleryId")
                         .HasColumnType("int");
 
@@ -350,6 +427,9 @@ namespace WebNews.Migrations
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int?>("VideoId")
                         .HasColumnType("int");
 
@@ -358,6 +438,8 @@ namespace WebNews.Migrations
                     b.HasIndex("GalleryId");
 
                     b.HasIndex("NewsId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VideoId");
 
@@ -425,6 +507,103 @@ namespace WebNews.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContactUs");
+                });
+
+            modelBuilder.Entity("WebNews.Models.Culture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CultureName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VisitCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cultures");
+                });
+
+            modelBuilder.Entity("WebNews.Models.Email", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Emails");
+                });
+
+            modelBuilder.Entity("WebNews.Models.EmailAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmailId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailId");
+
+                    b.ToTable("EmailAnswers");
+                });
+
+            modelBuilder.Entity("WebNews.Models.FavouriteCateUser", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("UserFavorites");
                 });
 
             modelBuilder.Entity("WebNews.Models.Gallery", b =>
@@ -752,6 +931,49 @@ namespace WebNews.Migrations
                     b.ToTable("VideoUrls");
                 });
 
+            modelBuilder.Entity("WebNews.Models.Visitor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CultureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VisitCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CultureId");
+
+                    b.ToTable("Visitors");
+                });
+
+            modelBuilder.Entity("WebNews.Models.VisitorHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("VisitTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VisitorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VisitorId");
+
+                    b.ToTable("VisitorHistories");
+                });
+
             modelBuilder.Entity("WebNews.Models.ArticleImage", b =>
                 {
                     b.HasBaseType("WebNews.Models.Image");
@@ -824,6 +1046,13 @@ namespace WebNews.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebNews.Models.Activity", b =>
+                {
+                    b.HasOne("WebNews.Models.ApplicationUser", "User")
+                        .WithMany("Activities")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("WebNews.Models.ApplicationUserRole", b =>
                 {
                     b.HasOne("WebNews.Models.ApplicationRole", "Role")
@@ -880,6 +1109,15 @@ namespace WebNews.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebNews.Models.Attachments", b =>
+                {
+                    b.HasOne("WebNews.Models.Email", "Email")
+                        .WithMany("Attachments")
+                        .HasForeignKey("EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WebNews.Models.Comment", b =>
                 {
                     b.HasOne("WebNews.Models.Gallery", "Gallery")
@@ -889,6 +1127,10 @@ namespace WebNews.Migrations
                     b.HasOne("WebNews.Models.News", "News")
                         .WithMany("Comments")
                         .HasForeignKey("NewsId");
+
+                    b.HasOne("WebNews.Models.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
 
                     b.HasOne("WebNews.Models.Video", "Video")
                         .WithMany("Comments")
@@ -900,6 +1142,41 @@ namespace WebNews.Migrations
                     b.HasOne("WebNews.Models.Comment", "Comment")
                         .WithMany("Answers")
                         .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebNews.Models.Email", b =>
+                {
+                    b.HasOne("WebNews.Models.ApplicationUser", "Receiver")
+                        .WithMany("ReceivedEmail")
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("WebNews.Models.ApplicationUser", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId");
+                });
+
+            modelBuilder.Entity("WebNews.Models.EmailAnswer", b =>
+                {
+                    b.HasOne("WebNews.Models.Email", "Email")
+                        .WithMany("Answers")
+                        .HasForeignKey("EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebNews.Models.FavouriteCateUser", b =>
+                {
+                    b.HasOne("WebNews.Models.Category", "Category")
+                        .WithMany("Users")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebNews.Models.ApplicationUser", "User")
+                        .WithMany("FavouriteCategories")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1030,6 +1307,24 @@ namespace WebNews.Migrations
                     b.HasOne("WebNews.Models.Video", "Video")
                         .WithMany("Videos")
                         .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebNews.Models.Visitor", b =>
+                {
+                    b.HasOne("WebNews.Models.Culture", "Culture")
+                        .WithMany("Visitors")
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebNews.Models.VisitorHistory", b =>
+                {
+                    b.HasOne("WebNews.Models.Visitor", "Visitor")
+                        .WithMany("VisitorHistories")
+                        .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,18 @@ namespace WebNews.Areas.Panel.Controllers
     {
         private readonly DatabaseContext _context;
         private readonly IImageHandler _imageHandler;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ISeoUrlEditor seoUrlEditor;
 
         public NewsController(DatabaseContext context,
-                              IImageHandler imageHandler)
+                              IImageHandler imageHandler,
+                              UserManager<ApplicationUser> userManager,
+                              ISeoUrlEditor seoUrlEditor)
         {
             _context = context;
             _imageHandler = imageHandler;
+            this.userManager = userManager;
+            this.seoUrlEditor = seoUrlEditor;
         }
 
         public IActionResult Index()
@@ -92,10 +99,15 @@ namespace WebNews.Areas.Panel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SeoUrl,Title,Body,ShortDescription,PublishedDate,IsPublished")] News news, string tags, IFormFile mainImage, List<IFormFile> images, int[] categoryId)
         {
+            ViewData["Categories"] = new MultiSelectList(await _context.Categories.ToListAsync(), "Id", "Name", news.Categories);
+            if (mainImage == null)
+            {
+                return View();
+            }
             if (ModelState.IsValid)
             {
-                var newSeoUrl2 = news.SeoUrl.Replace(" ", "-").Replace("'", "-").Replace(":", "-").Replace(";", "-");
-                var newSeoUrl = newSeoUrl2.Replace("?", "-");
+                //var newSeoUrl2 = news.SeoUrl.Replace(" ", "-").Replace("'", "-").Replace(":", "-").Replace(";", "-");
+                var newSeoUrl = seoUrlEditor.FixSeoUrl(news.SeoUrl);
 
                 string extension = null;
                 string fileName = null;
@@ -186,13 +198,15 @@ namespace WebNews.Areas.Panel.Controllers
                 }
 
                 news.SeoUrl = newSeoUrl;
-
+                var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                news.User = user;
+                news.UserId = user.Id;
                 await _context.AddAsync(news);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(ListIndex));
             }
-            ViewData["Categories"] = new MultiSelectList(await _context.Categories.ToListAsync(), "Id", "Name", news.Categories);
+            
             return View(news);
         }
 
@@ -254,7 +268,7 @@ namespace WebNews.Areas.Panel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SeoUrl,Title,Body,ShortDescription,IsPublished")] News news, string tags, IFormFile mainImage, List<IFormFile> images, int[] categoryId)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SeoUrl,Title,Body,ShortDescription,IsPublished")] News news, string tags, IFormFile mainImage, List<IFormFile> images, int[] categoryId, int[] imagecheck)
         {
             if (id != news.Id)
             {
@@ -284,6 +298,11 @@ namespace WebNews.Areas.Panel.Controllers
 
                     string extension = null;
                     string fileName = null;
+                    foreach (var imgId in imagecheck)
+                    {
+                        var img = await _context.Images.FindAsync(imgId);
+                        _context.Images.Remove(img);
+                    }
                     if (mainImage != null)
                     {
                         _imageHandler.RemoveImage(Constant.NewsFolder, changeNews.MainImage);
@@ -295,10 +314,6 @@ namespace WebNews.Areas.Panel.Controllers
                     }
                     if (images != null)
                     {
-                        foreach (var pic in changeNews.Image)
-                        {
-                            _imageHandler.RemoveImage(Constant.NewsFolder, pic.ImageUrl);
-                        }
 
                         for (int i = 0; i < images.Count; i++)
                         {
@@ -314,6 +329,7 @@ namespace WebNews.Areas.Panel.Controllers
                             changeNews.Image.Add(newsImage);
                         }
                     }
+                    
 
                     if (changeNews.Categories.Any())
                     {
@@ -381,6 +397,10 @@ namespace WebNews.Areas.Panel.Controllers
                             changeNews.Tags.Add(newNewsTag);
                         }
                     }
+                    var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                    changeNews.Modifier = user;
+                    changeNews.IsModified = true;
+                    changeNews.ModfierId = user.Id;
                     _context.Update(changeNews);
                     await _context.SaveChangesAsync();
                 }

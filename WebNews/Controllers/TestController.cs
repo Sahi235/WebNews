@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using WebNews.Interfaces.NewsInterfaces;
+using WebNews.Models;
 
 namespace WebNews.Controllers
 {
     public class TestController : Controller
     {
-        private readonly IActionContextAccessor accessor;
+        private readonly INewsRepositories<News> newsRepositories;
 
-        public TestController(IActionContextAccessor accessor)
+        public TestController(INewsRepositories<News> newsRepositories)
         {
-            this.accessor = accessor;
+            this.newsRepositories = newsRepositories;
         }
-
-
-        public IActionResult Test()
+        public async Task<IActionResult> Index()
         {
-            ViewData["ip"] = accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
-            return View();
+            var news = await newsRepositories.GetTByOrderByInList(c => c.Id);
+            return View(news);
         }
     }
 }

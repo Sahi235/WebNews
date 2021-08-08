@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="card-footer d-flex justify-content-between">
-                    <a href="#" class="text-default"><i class="icon-bubble2 mr-2"></i> Comment</a>
+                    <a asp-action="NewsComments" asp-controller="Comments" asp-area="Panel" asp-route-id="@news.Id" class="text-default"><i class="icon-bubble2 mr-2"></i> Comment</a>
                     <span class="text-muted"><i class="icon-eye mr-2"></i> @news.ViewCount</span>
                 </div>
             </div>

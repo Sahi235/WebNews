@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebNews.Models;
+using WebNews.ViewModels.Accounts;
 
 namespace WebNews.ViewModels.Home.Read
 {

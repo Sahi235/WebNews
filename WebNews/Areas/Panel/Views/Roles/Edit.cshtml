@@ -1,0 +1,106 @@
+﻿@model WebNews.Areas.Panel.ViewModels.Roles.EditRoleVm;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+}
+
+@section css
+{
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<form asp-action="Edit" asp-controller="Roles" asp-area="Panel" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group row">
+        <label class="col-form-label col-lg-2">Default text input</label>
+        <div class="col-lg-10">
+            <input asp-for="RoleName" class="form-control">
+            <span asp-validation-for="RoleName" class="text-danger"></span>
+        </div>
+        <input hidden asp-for="@Model.Previous" value="@Model.Previous" />
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Edit
+    </button>
+</form>
+
+<br />
+<br />
+
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Users</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <ul class="media-list media-list-linked">
+        <li class="media font-weight-semibold border-0 py-1">Recent Users</li>
+
+        @if (Model.Users.Any())
+        {
+            @foreach (var user in Model.Users)
+            {
+                <li>
+                    <a href="#" class="media" data-toggle="collapse" data-target="#james">
+                        <div class="mr-3">
+                            @if (user.ImageUrl != null)
+                            {
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="40" height="40" alt="">
+                            }
+                            else
+                            {
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="40" height="40" alt="@user.UserName">
+                            }
+                        </div>
+                        <div class="media-body">
+                            <div class="media-title font-weight-semibold">@user.UserName</div>
+                            @if (user.Roles.Any())
+                            {
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="text-muted">@role.Role.Name</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">Does not have any role</span>
+                            }
+                        </div>
+                        <div class="align-self-center ml-3">
+                            <span class="badge badge-mark border-success"></span>
+                        </div>
+                    </a>
+
+                    <div class="collapse" id="james">
+                        <div class="card-body bg-light border-top border-bottom">
+                            <ul class="list list-unstyled mb-0">
+                                <li><i class="icon-pin mr-2"></i>@user.AboutMe</li>
+                                <li><i class="icon-user-tie mr-2"></i>@user.News.Count()</li>
+                                <li><i class="icon-phone mr-2"></i>@user.PhoneNumber</li>
+                                <li><i class="icon-mail5 mr-2"></i> <a href="#">@user.Email</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="media font-weight-semibold border-0 py-3">
+                <h3>No User for this role at this moment!</h3>
+            </li>
+        }
+        <nav>
+            @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model.Users })
+        </nav>
+
+    </ul>
+</div>

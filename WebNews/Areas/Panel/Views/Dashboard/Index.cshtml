@@ -1,12 +1,1374 @@
-﻿
+﻿@model WebNews.Areas.Panel.ViewModels.Dashboard.DashboardIndexVm;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/shared/_LimitlessLayout.cshtml";
 }
 
 @section css{
-    <script src="~/LimitlessAssets/global_assets/js/demo_pages/animations_velocity_examples.js"></script>
-    <script src="~/LimitlessAssets/global_assets/js/plugins/velocity/velocity.min.js"></script>
-    <script src="~/LimitlessAssets/global_assets/js/plugins/velocity/velocity.ui.min.js"></script>
-    <script src="~/LimitlessAssets/global_assets/js/plugins/ui/prism.min.js"></script>
+    @*<script src="~/LimitlessAssets/global_assets/js/demo_pages/animations_velocity_examples.js"></script>
+        <script src="~/LimitlessAssets/global_assets/js/plugins/velocity/velocity.min.js"></script>*@
+    @*<script src="~/LimitlessAssets/global_assets/js/plugins/velocity/velocity.ui.min.js"></script>*@
+    @*<script src="~/LimitlessAssets/global_assets/js/plugins/ui/prism.min.js"></script>*@
+    <script src="~/lib/jquery/jquery.js"></script>
+}
+
+
+
+<!-- Info blocks -->
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="icon-book icon-2x text-success-400 border-success-400 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                <h5 class="card-title">News</h5>
+                @*<p class="mb-3">Ouch found swore much dear conductively hid submissively hatchet vexed far inanimately alongside candidly much and jeez</p>*@
+                <a asp-action="Index" asp-controller="News" asp-area="Panel" class="btn bg-success-400">Index</a>
+                <a asp-action="Create" asp-controller="News" asp-area="Panel" class="btn bg-success-400">New news</a>
+                <a asp-action="ListIndex" asp-controller="News" asp-area="Panel" class="btn bg-success-400">News List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="icon-gallery icon-2x text-warning-400 border-warning-400 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                <h5 class="card-title">Galleries</h5>
+                @*<p class="mb-3">Dear spryly growled much far jeepers vigilantly less and far hideous and some mannishly less jeepers less and and crud</p>*@
+                <a asp-action="Index" asp-controller="Galleries" asp-area="Panel" class="btn bg-warning-400">Index</a>
+                <a asp-action="Create" asp-controller="Galleries" asp-area="Panel" class="btn bg-warning-400">New gallery</a>
+                <a asp-action="ListIndex" asp-controller="Galleries" asp-area="Panel" class="btn bg-warning-400">Gallery list</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="icon-newspaper2 icon-2x text-blue border-blue border-3 rounded-round p-3 mb-3 mt-1"></i>
+                <h5 class="card-title">Articles</h5>
+                @*<p class="mb-3">Diabolically somberly astride crass one endearingly blatant depending peculiar antelope piquantly popularly adept much</p>*@
+                <a asp-action="Index" asp-controller="Articles" asp-area="Panel" class="btn bg-blue">Index</a>
+                <a asp-action="Create" asp-controller="Articles" asp-area="Panel" class="btn bg-blue">New Article</a>
+                <a asp-action="ListIndex" asp-controller="Articles" asp-area="Panel" class="btn bg-blue">Article list</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /info blocks -->
+
+
+<div class="row">
+    <div class="col-xl-8">
+        <!-- Quick stats boxes -->
+        <div class="row">
+            <div class="col-lg-4">
+
+                <!-- Members online -->
+                <div class="card bg-teal-400">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="font-weight-semibold mb-0">@Model.NewsCount</h3>
+                            @*<span class="badge bg-teal-800 badge-pill align-self-center ml-auto">+53,6%</span>*@
+                        </div>
+
+                        <div>
+                            Total News
+                            <div class="font-size-sm opacity-75">489 avg per day</div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div id="members-online"></div>
+                    </div>
+                </div>
+                <!-- /members online -->
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <!-- Current server load -->
+                <div class="card bg-pink-400">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="font-weight-semibold mb-0">49.4%</h3>
+                            <div class="list-icons ml-auto">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item dropdown-toggle" data-toggle="dropdown"><i class="icon-cog3"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="#" class="dropdown-item"><i class="icon-sync"></i> Update data</a>
+                                        <a href="#" class="dropdown-item"><i class="icon-list-unordered"></i> Detailed log</a>
+                                        <a href="#" class="dropdown-item"><i class="icon-pie5"></i> Statistics</a>
+                                        <a href="#" class="dropdown-item"><i class="icon-cross3"></i> Clear list</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            Current server load
+                            <div class="font-size-sm opacity-75">34.6% avg</div>
+                        </div>
+                    </div>
+
+                    <div id="server-load"></div>
+                </div>
+                <!-- /current server load -->
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <!-- Today's revenue -->
+                <div class="card bg-blue-400">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="font-weight-semibold mb-0">@Model.UserCount</h3>
+                            <div class="list-icons ml-auto">
+                                <a class="list-icons-item" data-action="reload"></a>
+                            </div>
+                        </div>
+
+                        <div>
+                            Total user
+                            <div class="font-size-sm opacity-75">3 avg per day</div>
+                        </div>
+                    </div>
+
+                    <div id="today-revenue"></div>
+                </div>
+                <!-- /today's revenue -->
+
+            </div>
+        </div>
+        <!-- /quick stats boxes -->
+
+
+        <div class="card">
+            <div class="card-header header-elements-sm-inline">
+                <h6 class="card-title">Comments</h6>
+                <div class="header-elements">
+                    <a class="text-default daterange-ranges font-weight-semibold cursor-pointer dropdown-toggle">
+                        <i class="icon-calendar3 mr-2"></i>
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body d-md-flex align-items-md-center justify-content-md-between flex-md-wrap">
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <div id="tickets-status"></div>
+                    <div class="ml-3">
+                        <h5 class="font-weight-semibold mb-0">@Model.AllCommentsCount <span class="text-success font-size-sm font-weight-normal"><i class="icon-arrow-up12"></i> (+2.9%)</span></h5>
+                        <span class="badge badge-mark border-success mr-1"></span> <span class="text-muted">Jun 16, 10:00 am</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <a href="#" class="btn bg-transparent border-indigo-400 text-indigo-400 rounded-round border-2 btn-icon">
+                        <i class="icon-alarm-add"></i>
+                    </a>
+                    <div class="ml-3">
+                        <h5 class="font-weight-semibold mb-0">@Model.ApprovedCommentsCount</h5>
+                        <span class="text-muted">Approved</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <a href="#" class="btn bg-transparent border-indigo-400 text-indigo-400 rounded-round border-2 btn-icon">
+                        <i class="icon-spinner11"></i>
+                    </a>
+                    <div class="ml-3">
+                        <h5 class="font-weight-semibold mb-0">@Model.UnApprovedCommentsCount</h5>
+                        <span class="text-muted">Unapproveds</span>
+                    </div>
+                </div>
+
+                <div>
+                    <a asp-action="Index" asp-controller="Comments" asp-area="Panel" class="btn bg-teal-400"><i class="icon-statistics mr-2"></i> Manage Comments</a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px">Time</th>
+                            <th style="width: 300px;">Author</th>
+                            <th>Comment</th>
+                            <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-active table-border-double">
+                            <td colspan="3">Active tickets</td>
+                            <td class="text-right">
+                                <span class="badge bg-blue badge-pill">@Model.ApprovedCommentsCount </span>
+                            </td>
+                        </tr>
+
+
+
+                        @foreach (var comment in Model.AllComments.Where(c => c.IsApproved == true))
+                        {
+                            <tr id="comment-@comment.Id">
+                                <td class="text-center">
+                                    @*<h6 class="mb-0">40</h6>*@
+                                    <div class="font-size-sm text-muted line-height-1">@comment.PublishedDate.Humanize()</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-3">
+                                            <a href="#" class="btn bg-warning-400 rounded-round btn-icon btn-sm">
+                                                <span class="letter-icon"></span>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="#" class="text-default font-weight-semibold letter-icon-title">@comment.Name</a>
+                                            <div class="text-muted font-size-sm"><span class="badge badge-mark border-blue mr-1"></span> Approved</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-controller="Comments" asp-area="Panel" asp-route-id="@comment.Id" class="text-default">
+                                        @if (comment.Description.Length > 50)
+                                        {
+                                            <div class="font-weight-semibold">@comment.Description.Substring(50) ...</div>
+                                        }
+                                        else
+                                        {
+                                            @comment.Description
+                                        }
+                                        @*<span class="text-muted">Left rounds up, right rounds down. should keep everything...</span>*@
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <div class="list-icons">
+                                        <div class="dropdown">
+                                            <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item"><i class="icon-pen"></i>Edit</a>
+                                                <a href="#" class="dropdown-item"><i class="icon-history"></i>Details</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" id="RemoveComment-@comment.Id" class="dropdown-item"><i class="icon-cross2 text-danger"></i> Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr class="table-active table-border-double">
+                            <td colspan="3">Resolved tickets</td>
+                            <td class="text-right">
+                                <span class="badge bg-success badge-pill">@Model.UnApprovedCommentsCount </span>
+                            </td>
+                        </tr>
+
+
+                        @foreach (var comment in Model.AllComments.Where(c => c.IsApproved == false))
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @*<h6 class="mb-0">40</h6>*@
+                                    <div class="font-size-sm text-muted line-height-1">@comment.PublishedDate.Humanize()</div>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-3">
+                                            <a href="#">
+                                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="32" height="32" alt="">
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="#" class="text-default font-weight-semibold">@comment.Name</a>
+                                            <div class="text-muted font-size-sm"><span class="badge badge-mark border-success mr-1"></span> Unapproved</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-controller="Comments" asp-area="Panel" asp-route-id="@comment.Id" class="text-default">
+                                        @if (comment.Description.Length > 50)
+                                        {
+                                            <div>@comment.Description.Substring(50)</div>
+                                        }
+                                        else
+                                        {
+                                            <div>@comment.Description</div>
+                                        }
+
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <div class="list-icons">
+                                        <div class="dropdown">
+                                            <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item"><i class="icon-undo"></i>Edit</a>
+                                                <a href="#" class="dropdown-item"><i class="icon-history"></i>Details</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" id="ApproveComment-@comment.Id" class="dropdown-item"><i class="icon-plus3 text-blue"></i> Approve comment</a>
+                                                <a href="#" id="RemoveComment-@comment.Id" class="dropdown-item"><i class="icon-cross2 text-danger"></i>Remove comment</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /support tickets -->
+        <!-- Latest News -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Latest posts</h6>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+                        <a class="list-icons-item" data-action="remove"></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-xl-6">
+                        @for (int i = 0; i < 2; i++)
+                        {
+                            <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                <div class="mr-sm-3 mb-2 mb-sm-0">
+                                    <div class="card-img-actions">
+                                        <a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id">
+                                            <img src="~/images/News/@Model.LastFourNews[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80px" alt="">
+                                            <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="media-body">
+                                    @if (@Model.LastFourNews[i].Title.Length > 25)
+                                    {
+                                        <h6 class="media-title"><a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id">@Model.LastFourNews[i].Title.Substring(0, 25) ....</a></h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="media-title"><a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id">@Model.LastFourNews[i].Title</a></h6>
+                                    }
+                                    <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                        <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourNews[i].PublishedDate.Humanize()</li>
+                                    </ul>
+                                    @if (@Model.LastFourNews[i].Title.Length > 50)
+                                    {
+                                        @Model.LastFourNews[i].Title.Substring(0, 50)
+                                    }
+                                    else
+                                    {
+                                        @Model.LastFourNews[i].Title
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        @for (int i = 2; i < 4; i++)
+                        {
+                            <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                <div class="mr-sm-3 mb-2 mb-sm-0">
+                                    <div class="card-img-actions">
+                                        <a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id" >
+                                            <img src="~/images/News/@Model.LastFourNews[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80" alt="">
+                                            <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="media-body">
+                                    @if (@Model.LastFourNews[i].Title.Length > 25)
+                                    {
+                                        <h6 class="media-title"><a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id">@Model.LastFourNews[i].Title.Substring(0, 25) ....</a></h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="media-title"><a asp-action="Edit" asp-controller="News" asp-area="Panel" asp-route-id="@Model.LastFourNews[i].Id">@Model.LastFourNews[i].Title</a></h6>
+                                    }
+                                    <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                        <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourNews[i].PublishedDate.Humanize()</li>
+                                    </ul>
+                                    @if (@Model.LastFourNews[i].Title.Length > 50)
+                                    {
+                                        @Model.LastFourNews[i].Title.Substring(0, 50)
+                                    }
+                                    else
+                                    {
+                                        @Model.LastFourNews[i].Title
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /latest News -->
+        <!-- Latest posts -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Latest Galleries</h6>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+                        <a class="list-icons-item" data-action="remove"></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-xl-6">
+                        @for (int i = 0; i < 2; i++)
+                        {
+                            <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                <div class="mr-sm-3 mb-2 mb-sm-0">
+                                    <div class="card-img-actions">
+                                        <a href="#">
+                                            <img src="~/images/Gallery/@Model.LastFourGalleries[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80" alt="">
+                                            <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="media-body">
+                                    @if (@Model.LastFourGalleries[i].Title.Length > 25)
+                                    {
+                                        <h6 class="media-title"><a href="#">@Model.LastFourGalleries[i].Title.Substring(0, 25) ....</a></h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="media-title"><a href="#">@Model.LastFourGalleries[i].Title</a></h6>
+                                    }
+                                    <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                        <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourGalleries[i].PublishedDate.Humanize()</li>
+                                    </ul>
+                                    @if (@Model.LastFourGalleries[i].Title.Length > 50)
+                                    {
+                                        @Model.LastFourGalleries[i].Title.Substring(0, 50)
+                                    }
+                                    else
+                                    {
+                                        @Model.LastFourGalleries[i].Title
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-xl-6">
+                        @for (int i = 2; i < 4; i++)
+                        {
+                            <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                <div class="mr-sm-3 mb-2 mb-sm-0">
+                                    <div class="card-img-actions">
+                                        <a href="#">
+                                            <img src="~/images/Gallery/@Model.LastFourGalleries[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80" alt="">
+                                            <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="media-body">
+                                    @if (@Model.LastFourGalleries[i].Title.Length > 25)
+                                    {
+                                        <h6 class="media-title"><a href="#">@Model.LastFourGalleries[i].Title.Substring(0, 25) ....</a></h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="media-title"><a href="#">@Model.LastFourGalleries[i].Title</a></h6>
+                                    }
+                                    <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                        <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourGalleries[i].PublishedDate.Humanize()</li>
+                                    </ul>
+                                    @if (@Model.LastFourGalleries[i].Title.Length > 50)
+                                    {
+                                        @Model.LastFourGalleries[i].Title.Substring(0, 50)
+                                    }
+                                    else
+                                    {
+                                        @Model.LastFourGalleries[i].Title
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /latest posts -->
+        <!-- Latest posts -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Latest Articles</h6>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+                        <a class="list-icons-item" data-action="remove"></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-xl-6">
+                        @if (Model.LastFourArticles.Count() > 2)
+                        {
+                            @for (int i = 0; i < 2; i++)
+                            {
+                                <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                    <div class="mr-sm-3 mb-2 mb-sm-0">
+                                        <div class="card-img-actions">
+                                            <a href="#">
+                                                <img src="~/images/Article/@Model.LastFourArticles[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80" alt="">
+                                                <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="media-body">
+                                        @if (@Model.LastFourArticles[i].Title.Length > 25)
+                                        {
+                                            <h6 class="media-title"><a href="#">@Model.LastFourArticles[i].Title.Substring(0, 25) ....</a></h6>
+                                        }
+                                        else
+                                        {
+                                            <h6 class="media-title"><a href="#">@Model.LastFourArticles[i].Title</a></h6>
+                                        }
+                                        <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                            <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourArticles[i].PublishedDate.Humanize()</li>
+                                        </ul>
+                                        @if (@Model.LastFourArticles[i].Title.Length > 50)
+                                        {
+                                            @Model.LastFourArticles[i].Title.Substring(0, 50)
+                                        }
+                                        else
+                                        {
+                                            @Model.LastFourArticles[i].Title
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="col-xl-6">
+                        @if (Model.LastFourArticles.Count() > 4)
+                        {
+                            @for (int i = 2; i < 4; i++)
+                            {
+                                <div class="media flex-column flex-sm-row mt-0 mb-3">
+                                    <div class="mr-sm-3 mb-2 mb-sm-0">
+                                        <div class="card-img-actions">
+                                            <a href="#">
+                                                <img src="~/images/Article/@Model.LastFourArticles[i].MainImage" class="img-fluid img-preview rounded" width="80px" height="80" alt="">
+                                                <span class="card-img-actions-overlay card-img"><i class="icon-play3 icon-2x"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="media-body">
+                                        @if (@Model.LastFourArticles[i].Title.Length > 25)
+                                        {
+                                            <h6 class="media-title"><a href="#">@Model.LastFourArticles[i].Title.Substring(0, 25) ....</a></h6>
+                                        }
+                                        else
+                                        {
+                                            <h6 class="media-title"><a href="#">@Model.LastFourArticles[i].Title</a></h6>
+                                        }
+                                        <ul class="list-inline list-inline-dotted text-muted mb-2">
+                                            <li class="list-inline-item"><i class="icon-book-play mr-2"></i>@Model.LastFourArticles[i].PublishedDate.Humanize()</li>
+                                        </ul>
+                                        @if (@Model.LastFourArticles[i].Title.Length > 50)
+                                        {
+                                            @Model.LastFourArticles[i].Title.Substring(0, 50)
+                                        }
+                                        else
+                                        {
+                                            @Model.LastFourArticles[i].Title
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /latest posts -->
+
+    </div>
+
+
+    <div class="col-xl-4">
+
+        <!-- Navigation -->
+        <div class="card">
+            <div class="card-header bg-transparent header-elements-inline">
+                <span class="card-title font-weight-semibold">Navigation</span>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a href="#" class="list-icons-item"><i class="icon-cog3"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <a href="#" class="btn bg-teal btn-block">Ask question <i class="icon-comment ml-2"></i></a>
+            </div>
+
+            <div class="nav nav-sidebar mb-2">
+                <li class="nav-item">
+                    <a href="#" class="nav-link border-0"><i class="icon-lifebuoy"></i> Help center</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="icon-book"></i> Knowledgebase</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span>
+                            <i class="icon-reading"></i>
+                            Articles
+                        </span>
+                        <span class="badge badge-danger badge-pill align-self-center ml-auto">390</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="icon-graduation"></i> Tutorials</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span>
+                            <i class="icon-book-play"></i>
+                            Video tutorials
+                        </span>
+                        <span class="badge badge-primary badge-pill align-self-center ml-auto">78</span>
+                    </a>
+                </li>
+                <li class="nav-item-divider"></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="icon-comment"></i> Ask our community</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="icon-mail5"></i> Contact us</a>
+                </li>
+            </div>
+        </div>
+        <!-- /navigation -->
+        <!-- Online staff members -->
+        <div class="card">
+            <div class="card-header bg-transparent header-elements-inline">
+                <span class="card-title font-weight-semibold">Staff members</span>
+                <div class="header-elements">
+                    <span class="badge badge-success badge-pill">@Model.Stuff.Users.Count()</span>
+                </div>
+            </div>
+
+            <div class="card-body">
+                @*<ul class="media-list">
+                    @foreach (var stuff in Model.Stuff)
+                    {
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold text-default">@stuff.UserName</a>
+                                <span class="font-size-sm text-muted d-block">
+                                    <span class="badge badge-mark border-success mr-1"></span>
+                                    @foreach (var role in stuff.Roles)
+                                    {
+                                        <span>@role.Role.Name</span><span>,</span>
+                                    }
+                                </span>
+                            </div>
+                            <div class="align-self-center ml-3">
+                                <div class="list-icons">
+                                    <a href="#" class="list-icons-item"><i class="icon-comment-discussion"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>*@
+                <ul class="media-list">
+                    @foreach (var stuff in Model.Stuff.Users)
+                    {
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold text-default">@stuff.User.UserName</a>
+                                <span class="font-size-sm text-muted d-block">
+                                    <span class="badge badge-mark border-success mr-1"></span>
+                                    @for (int i = 0; i < stuff.User.Roles.Count(); i++)
+                                    {
+                                        <span>@stuff.User.Roles.ToList()[i].Role.Name</span>
+                                        if (i + 1 !> stuff.User.Roles.Count())
+                                        {
+                                            <span>,</span>
+                                        }
+                                    }
+                                </span>
+                            </div>
+                            <div class="align-self-center ml-3">
+                                <div class="list-icons">
+                                    <a href="#" class="list-icons-item"><i class="icon-comment-discussion"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <!-- /online staff members -->
+        <!-- Progress counters -->
+        <div class="row">
+            <div class="col-sm-6">
+
+                <!-- Available hours -->
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <!-- Progress counter -->
+                        <div class="svg-center position-relative" id="hours-available-progress"></div>
+                        <!-- /progress counter -->
+                        <!-- Bars -->
+                        <div id="hours-available-bars"></div>
+                        <!-- /bars -->
+
+                    </div>
+                </div>
+                <!-- /available hours -->
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <!-- Productivity goal -->
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <!-- Progress counter -->
+                        <div class="svg-center position-relative" id="goal-progress"></div>
+                        <!-- /progress counter -->
+                        <!-- Bars -->
+                        <div id="goal-bars"></div>
+                        <!-- /bars -->
+
+                    </div>
+                </div>
+                <!-- /productivity goal -->
+
+            </div>
+        </div>
+        <!-- /progress counters -->
+        <!-- Daily sales -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Daily sales stats</h6>
+                <div class="header-elements">
+                    <span class="font-weight-bold text-danger-600 ml-2">$4,378</span>
+                    <div class="list-icons ml-3">
+                        <div class="dropdown">
+                            <a href="#" class="list-icons-item dropdown-toggle" data-toggle="dropdown"><i class="icon-cog3"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" class="dropdown-item"><i class="icon-sync"></i> Update data</a>
+                                <a href="#" class="dropdown-item"><i class="icon-list-unordered"></i> Detailed log</a>
+                                <a href="#" class="dropdown-item"><i class="icon-pie5"></i> Statistics</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item"><i class="icon-cross3"></i> Clear list</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="chart" id="sales-heatmap"></div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="w-100">Application</th>
+                            <th>Time</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-primary-400 rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Sigma application</a>
+                                        <div class="text-muted font-size-sm"><i class="icon-checkmark3 font-size-sm mr-1"></i> New order</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted font-size-sm">06:28 pm</span>
+                            </td>
+                            <td>
+                                <h6 class="font-weight-semibold mb-0">$49.90</h6>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Alpha application</a>
+                                        <div class="text-muted font-size-sm"><i class="icon-spinner11 font-size-sm mr-1"></i> Renewal</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted font-size-sm">04:52 pm</span>
+                            </td>
+                            <td>
+                                <h6 class="font-weight-semibold mb-0">$90.50</h6>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-indigo-400 rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Delta application</a>
+                                        <div class="text-muted font-size-sm"><i class="icon-lifebuoy font-size-sm mr-1"></i> Support</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted font-size-sm">01:26 pm</span>
+                            </td>
+                            <td>
+                                <h6 class="font-weight-semibold mb-0">$60.00</h6>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-success-400 rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Omega application</a>
+                                        <div class="text-muted font-size-sm"><i class="icon-lifebuoy font-size-sm mr-1"></i> Support</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted font-size-sm">11:46 am</span>
+                            </td>
+                            <td>
+                                <h6 class="font-weight-semibold mb-0">$55.00</h6>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <a href="#" class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+                                            <span class="letter-icon"></span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="text-default font-weight-semibold letter-icon-title">Alpha application</a>
+                                        <div class="text-muted font-size-sm"><i class="icon-spinner11 font-size-sm mr-2"></i> Renewal</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted font-size-sm">10:29 am</span>
+                            </td>
+                            <td>
+                                <h6 class="font-weight-semibold mb-0">$90.50</h6>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /daily sales -->
+        <!-- My messages -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">My messages</h6>
+                <div class="header-elements">
+                    <span><i class="icon-history text-warning mr-2"></i> Jul 7, 10:30</span>
+                    <span class="badge bg-success align-self-start ml-3">Online</span>
+                </div>
+            </div>
+
+            <!-- Numbers -->
+            <div class="card-body py-0">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <h5 class="font-weight-semibold mb-0">2,345</h5>
+                            <span class="text-muted font-size-sm">this week</span>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <h5 class="font-weight-semibold mb-0">3,568</h5>
+                            <span class="text-muted font-size-sm">this month</span>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <h5 class="font-weight-semibold mb-0">32,693</h5>
+                            <span class="text-muted font-size-sm">all messages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /numbers -->
+            <!-- Area chart -->
+            <div id="messages-stats"></div>
+            <!-- /area chart -->
+            <!-- Tabs -->
+            <ul class="nav nav-tabs nav-tabs-solid nav-justified bg-indigo-400 border-x-0 border-bottom-0 border-top-indigo-300 mb-0">
+                <li class="nav-item">
+                    <a href="#messages-tue" class="nav-link font-size-sm text-uppercase active" data-toggle="tab">
+                        Tuesday
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#messages-mon" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                        Monday
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#messages-fri" class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+                        Friday
+                    </a>
+                </li>
+            </ul>
+            <!-- /tabs -->
+            <!-- Tabs content -->
+            <div class="tab-content card-body">
+                <div class="tab-pane active fade show" id="messages-tue">
+                    <ul class="media-list">
+                        <li class="media">
+                            <div class="mr-3 position-relative">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                                <span class="badge bg-danger-400 badge-pill badge-float border-2 border-white">8</span>
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">James Alexander</a>
+                                    <span class="font-size-sm text-muted">14:58</span>
+                                </div>
+
+                                The constitutionally inventoried precariously...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3 position-relative">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                                <span class="badge bg-danger-400 badge-pill badge-float border-2 border-white">6</span>
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Margo Baker</a>
+                                    <span class="font-size-sm text-muted">12:16</span>
+                                </div>
+
+                                Pinched a well more moral chose goodness...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Jeremy Victorino</a>
+                                    <span class="font-size-sm text-muted">09:48</span>
+                                </div>
+
+                                Pert thickly mischievous clung frowned well...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Beatrix Diaz</a>
+                                    <span class="font-size-sm text-muted">05:54</span>
+                                </div>
+
+                                Nightingale taped hello bucolic fussily cardinal...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Richard Vango</a>
+                                    <span class="font-size-sm text-muted">01:43</span>
+                                </div>
+
+                                Amidst roadrunner distantly pompously where...
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="messages-mon">
+                    <ul class="media-list">
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Isak Temes</a>
+                                    <span class="font-size-sm text-muted">Tue, 19:58</span>
+                                </div>
+
+                                Reasonable palpably rankly expressly grimy...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Vittorio Cosgrove</a>
+                                    <span class="font-size-sm text-muted">Tue, 16:35</span>
+                                </div>
+
+                                Arguably therefore more unexplainable fumed...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Hilary Talaugon</a>
+                                    <span class="font-size-sm text-muted">Tue, 12:16</span>
+                                </div>
+
+                                Nicely unlike porpoise a kookaburra past more...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Bobbie Seber</a>
+                                    <span class="font-size-sm text-muted">Tue, 09:20</span>
+                                </div>
+
+                                Before visual vigilantly fortuitous tortoise...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Walther Laws</a>
+                                    <span class="font-size-sm text-muted">Tue, 03:29</span>
+                                </div>
+
+                                Far affecting more leered unerringly dishonest...
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="messages-fri">
+                    <ul class="media-list">
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Owen Stretch</a>
+                                    <span class="font-size-sm text-muted">Mon, 18:12</span>
+                                </div>
+
+                                Tardy rattlesnake seal raptly earthworm...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Jenilee Mcnair</a>
+                                    <span class="font-size-sm text-muted">Mon, 14:03</span>
+                                </div>
+
+                                Since hello dear pushed amid darn trite...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Alaster Jain</a>
+                                    <span class="font-size-sm text-muted">Mon, 13:59</span>
+                                </div>
+
+                                Dachshund cardinal dear next jeepers well...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Sigfrid Thisted</a>
+                                    <span class="font-size-sm text-muted">Mon, 09:26</span>
+                                </div>
+
+                                Lighted wolf yikes less lemur crud grunted...
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <div class="mr-3">
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle" width="36" height="36" alt="">
+                            </div>
+
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between">
+                                    <a href="#">Sherilyn Mckee</a>
+                                    <span class="font-size-sm text-muted">Mon, 06:38</span>
+                                </div>
+
+                                Less unicorn a however careless husky...
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /tabs content -->
+
+        </div>
+        <!-- /my messages -->
+        <!-- Daily financials -->
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Daily financials</h6>
+                <div class="header-elements">
+                    <div class="form-check form-check-inline form-check-right form-check-switchery form-check-switchery-sm">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-input-switchery" id="realtime" checked data-fouc>
+                            Realtime
+                        </label>
+                    </div>
+                    <span class="badge bg-danger-400 badge-pill">+86</span>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="chart mb-3" id="bullets"></div>
+
+                <ul class="media-list">
+                    <li class="media">
+                        <div class="mr-3">
+                            <a href="#" class="btn bg-transparent border-pink text-pink rounded-round border-2 btn-icon"><i class="icon-statistics"></i></a>
+                        </div>
+
+                        <div class="media-body">
+                            Stats for July, 6: <span class="font-weight-semibold">1938</span> orders, <span class="font-weight-semibold text-danger">$4220</span> revenue
+                            <div class="text-muted">2 hours ago</div>
+                        </div>
+
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="list-icons-item"><i class="icon-more"></i></a>
+                        </div>
+                    </li>
+
+                    <li class="media">
+                        <div class="mr-3">
+                            <a href="#" class="btn bg-transparent border-success text-success rounded-round border-2 btn-icon"><i class="icon-checkmark3"></i></a>
+                        </div>
+
+                        <div class="media-body">
+                            Invoices <a href="#">#4732</a> and <a href="#">#4734</a> have been paid
+                            <div class="text-muted">Dec 18, 18:36</div>
+                        </div>
+
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="list-icons-item"><i class="icon-more"></i></a>
+                        </div>
+                    </li>
+
+                    <li class="media">
+                        <div class="mr-3">
+                            <a href="#" class="btn bg-transparent border-primary text-primary rounded-round border-2 btn-icon"><i class="icon-alignment-unalign"></i></a>
+                        </div>
+
+                        <div class="media-body">
+                            Affiliate commission for June has been paid
+                            <div class="text-muted">36 minutes ago</div>
+                        </div>
+
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="list-icons-item"><i class="icon-more"></i></a>
+                        </div>
+                    </li>
+
+                    <li class="media">
+                        <div class="mr-3">
+                            <a href="#" class="btn bg-transparent border-warning-400 text-warning-400 rounded-round border-2 btn-icon"><i class="icon-spinner11"></i></a>
+                        </div>
+
+                        <div class="media-body">
+                            Order <a href="#">#37745</a> from July, 1st has been refunded
+                            <div class="text-muted">4 minutes ago</div>
+                        </div>
+
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="list-icons-item"><i class="icon-more"></i></a>
+                        </div>
+                    </li>
+
+                    <li class="media">
+                        <div class="mr-3">
+                            <a href="#" class="btn bg-transparent border-teal text-teal rounded-round border-2 btn-icon"><i class="icon-redo2"></i></a>
+                        </div>
+
+                        <div class="media-body">
+                            Invoice <a href="#">#4769</a> has been sent to <a href="#">Robert Smith</a>
+                            <div class="text-muted">Dec 12, 05:46</div>
+                        </div>
+
+                        <div class="ml-3 align-self-center">
+                            <a href="#" class="list-icons-item"><i class="icon-more"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /daily financials -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/lib/jquery/jquery.js"></script>
+    
+@foreach (var comment in Model.AllComments)
+{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#RemoveComment-@comment.Id").click(function () {
+                {
+                    $.post("https://localhost:44310/panel/comments/DeleteCommentFromDashboard/@comment.Id")
+                    $('#comment-@comment.Id').remove();
+                }})
+        })
+
+    </script>
+
+}
+
+@foreach (var comment in Model.AllComments)
+{
+    <script type="text/javascript">
+
+       $(document).ready(function () {
+            $("#ApproveComment-@comment.Id").click(function () {
+                {
+                    $.post("https://localhost:44310/panel/comments/ApproveCommentFromDashboard/@comment.Id")
+                    $('#comment-@comment.Id').remove();
+                }})
+        })
+
+    </script>
+
+
+}
+
 }

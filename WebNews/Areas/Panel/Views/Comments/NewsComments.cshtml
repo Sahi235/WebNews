@@ -8,6 +8,7 @@
 @section css
 {
     <script src="~/LimitlessAssets/global_assets/js/demo_pages/components_modals.js"></script>
+    <script src="~/LimitlessAssets/global_assets/js/demo_pages/form_floating_labels.js"></script>
 
 }
 <div class="card">
@@ -103,11 +104,10 @@
                                 <div class="dropdown">
                                     <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-undo"></i> Quick Action</a>
-                                        <a href="#" class="dropdown-item"><i class="icon-history"></i> Full history</a>
+                                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_info_@uapp.Id"><i class="icon-undo"></i>Reply</a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_success_@uapp.Id"><i class="icon-checkmark3 text-success"></i> Approve</a>
-                                        <a href="#" class="dropdown-item"><i class="icon-cross2 text-danger"></i> Delete</a>
+                                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_danger_@uapp.Id"><i class="icon-bin text-danger"></i> Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -137,15 +137,15 @@
                                     </a>
                                 </div>
                                 <div>
-                                    <a href="#" class="text-default font-weight-semibold letter-icon-title">Alan Macedo</a>
-                                    <div class="text-muted font-size-sm"><span class="badge badge-mark border-success mr-1"></span> Resolved</div>
+                                    <a href="#" class="text-default font-weight-semibold letter-icon-title">@app.Name</a>
+                                    <div class="text-muted font-size-sm"><span class="badge badge-mark border-success mr-1"></span> Approved</div>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <a href="#" class="text-default">
-                                <div>[#1046] Avoid some unnecessary HTML string</div>
-                                <span class="text-muted">Rather than building a string of HTML and then parsing it...</span>
+                                <div>@app.Description</div>
+                                @*<span class="text-muted">Rather than building a string of HTML and then parsing it...</span>*@
                             </a>
                         </td>
                         <td class="text-center">
@@ -153,11 +153,10 @@
                                 <div class="dropdown">
                                     <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item"><i class="icon-undo"></i> Quick reply</a>
-                                        <a href="#" class="dropdown-item"><i class="icon-history"></i> Full history</a>
+                                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_info_@app.Id"><i class="icon-undo"></i>Reply</a>
                                         <div class="dropdown-divider"></div>
-                                        <a href="#" class="dropdown-item"><i class="icon-plus3 text-blue"></i> Unresolve issue</a>
-                                        <a href="#" class="dropdown-item"><i class="icon-cross2 text-danger"></i> Close issue</a>
+                                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_warning_@app.Id"><i class="icon-cross2 text-danger"></i> Unapprove</a>
+                                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal_theme_danger_@app.Id"><i class="icon-bin text-danger"></i> Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -178,80 +177,203 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h6 class="modal-title">Success header</h6>
+                    <h6 class="modal-title">Approve Comment</h6>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <div class="modal-body">
-                    <h6 class="font-weight-semibold">Text in a modal</h6>
-                    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <h6 class="font-weight-semibold">Name</h6>
+                    <p>@unapp.Name</p>
+
+                    <hr>
+                    <h6 class="font-weight-semibold">Published Date</h6>
+                    <p>@unapp.PublishedDate.Humanize()</p>
 
                     <hr>
 
-                    <h6 class="font-weight-semibold">Another paragraph</h6>
-                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+
+                    <h6 class="font-weight-semibold">Comment</h6>
+                    <p>@unapp.Description</p>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn bg-success">Save changes</button>
+                    <form method="Post" asp-action="ApproveComment" asp-controller="Comments" asp-route-id="@unapp.Id">
+                        <button type="submit" class="btn bg-success">Approve</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 }
 
-
-
-
-
-
-
-
-@*<tr class="table-active table-border-double">
-        <td colspan="3">Closed tickets</td>
-        <td class="text-right">
-            <span class="badge bg-danger badge-pill">37</span>
-        </td>
-    </tr>
-
-
-    <tr>
-        <td class="text-center">
-            <i class="icon-cross2 text-danger"></i>
-        </td>
-        <td>
-            <div class="d-flex align-items-center">
-                <div class="mr-3">
-                    <a href="#" class="btn bg-brown-400 rounded-round btn-icon btn-sm">
-                        <span class="letter-icon"></span>
-                    </a>
+@foreach (var item in Model.UnApprovedComments)
+{
+    <div id="modal_theme_danger_@item.Id" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h6 class="modal-title">Delete Comment</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div>
-                    <a href="#" class="text-default font-weight-semibold letter-icon-title">Katleen Jensen</a>
-                    <div class="text-muted font-size-sm"><span class="badge badge-mark border-danger mr-1"></span> Closed</div>
+
+                <div class="modal-body">
+                    <h6 class="font-weight-semibold">Name</h6>
+                    <p>@item.Name</p>
+
+                    <hr>
+                    <h6 class="font-weight-semibold">Published Date</h6>
+                    <p>@item.PublishedDate.Humanize()</p>
+
+                    <hr>
+
+                    <h6 class="font-weight-semibold">Comment</h6>
+                    <p>@item.Description</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <form method="Post" asp-action="DeleteComment" asp-controller="Comments" asp-route-id="@item.Id">
+                        <button type="submit" class="btn bg-danger">Delete</button>
+                    </form>
                 </div>
             </div>
-        </td>
-        <td>
-            <a href="#" class="text-default">
-                <div>[#1038] Proper sizing of form control feedback</div>
-                <span class="text-muted">Feedback icon sizing inside a larger/smaller form-group...</span>
-            </a>
-        </td>
-        <td class="text-center">
-            <div class="list-icons">
-                <div class="dropdown">
-                    <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item"><i class="icon-undo"></i> Quick reply</a>
-                        <a href="#" class="dropdown-item"><i class="icon-history"></i> Full history</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item"><i class="icon-plus3 text-blue"></i> Unresolve issue</a>
-                        <a href="#" class="dropdown-item"><i class="icon-spinner11 text-grey"></i> Reopen issue</a>
+        </div>
+    </div>
+}
+
+@foreach (var item in Model.UnApprovedComments)
+{
+    <div id="modal_theme_info_@item.Id" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" asp-action="AnswerComment" asp-controller="Comments" asp-route-id="@item.Id">
+                    <div class="modal-header bg-info">
+                        <h6 class="modal-title">Reply To Comment</h6>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
+
+                    <div class="modal-body">
+                        <h6 class="font-weight-semibold">Name</h6>
+                        <p>@item.Name</p>
+
+                        <hr>
+                        <h6 class="font-weight-semibold">Comment</h6>
+                        <p>@item.Description</p>
+                        <p>@item.PublishedDate.Humanize()</p>
+                        <hr>
+                        @*<label class="form-group-float-label">Textarea</label>*@
+                        <textarea rows="5" cols="5" name="answer" class="form-control" placeholder="Answer"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn bg-info">Reply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@foreach (var item in Model.ApprovedComments)
+{
+    <div id="modal_theme_danger_@item.Id" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h6 class="modal-title">Delete Comment</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="font-weight-semibold">Name</h6>
+                    <p>@item.Name</p>
+
+                    <hr>
+                    <h6 class="font-weight-semibold">Published Date</h6>
+                    <p>@item.PublishedDate.Humanize()</p>
+
+                    <hr>
+
+                    <h6 class="font-weight-semibold">Comment</h6>
+                    <p>@item.Description</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <form method="Post" asp-action="DeleteComment" asp-area="Panel" asp-controller="Comments" asp-route-id="@item.Id">
+                        <button type="submit" class="btn bg-danger">Delete</button>
+                    </form>
                 </div>
             </div>
-        </td>
-    </tr>*@
+        </div>
+    </div>
+}
+
+@foreach (var item in Model.ApprovedComments)
+{
+    <div id="modal_theme_info_@item.Id" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" asp-action="AnswerComment" asp-controller="Comments" asp-area="Panel" asp-route-id="@item.Id">
+                    <div class="modal-header bg-info">
+                        <h6 class="modal-title">Reply To Comment</h6>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h6 class="font-weight-semibold">Name</h6>
+                        <p>@item.Name</p>
+
+                        <hr>
+                        <h6 class="font-weight-semibold">Comment</h6>
+                        <p>@item.Description</p>
+                        <p>@item.PublishedDate.Humanize()</p>
+                        <hr>
+                        @*<label class="form-group-float-label">Textarea</label>*@
+                        <textarea rows="5" cols="5" name="answer" class="form-control" placeholder="Answer"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn bg-info">Reply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@foreach (var item in Model.ApprovedComments)
+{
+    <div id="modal_theme_warning_@item.Id" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h6 class="modal-title">Unapprove Comment</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="font-weight-semibold">Name</h6>
+                    <p>@item.Name</p>
+
+                    <hr>
+                    <h6 class="font-weight-semibold">Published Date</h6>
+                    <p>@item.PublishedDate</p>
+
+                    <hr>
+
+                    <h6 class="font-weight-semibold">Comment</h6>
+                    <p>@item.Description</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <form method="post" asp-action="UnapproveComment" asp-controller="Comments" asp-area="Panel" asp-route-id="@item.Id">
+                        <button type="submit" class="btn bg-warning">Unapprove</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

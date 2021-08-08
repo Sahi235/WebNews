@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using ReflectionIT.Mvc.Paging;
 using WebNews.Areas.Panel.ViewModels.Comments.Read;
 using WebNews.Data;
@@ -22,10 +23,29 @@ namespace WebNews.Areas.Panel.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var databaseContext = _context.Comments.Include(c => c.News).Include(c => c.Video);
-            return View(await databaseContext.ToListAsync());
+            var comments = _context.Comments.Include(c => c.News).Select(c => new Comment
+            {
+                Id = c.Id,
+                Name = c.Name,
+                IsApproved = c.IsApproved,
+                Description = c.Description,
+                PublishedDate = c.PublishedDate,
+                News = c.News
+            }).OrderByDescending(c => c.PublishedDate);
+            var model = await PagingList.CreateAsync(comments, 100, page);
+            return View(model);
+        }
+
+
+        [HttpGet]
+        [Route("[Area]/[Controller]/[Action]/{id}")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var comment = await _context.Comments.Include(c => c.News).Include(c => c.Gallery).SingleOrDefaultAsync(c => c.Id == id);
+            if (comment == null) return NotFound();
+            return View(comment);
         }
 
 
@@ -68,7 +88,7 @@ namespace WebNews.Areas.Panel.Controllers
 
             NewsCommentsVM model = new NewsCommentsVM
             {
-                UnApprovedComments =  unApproved,
+                UnApprovedComments = unApproved,
                 ApprovedComments = approved
             };
             ViewData["CommentsCount"] = await upApprovedComments.CountAsync() + approvedComments.Count();
@@ -208,6 +228,123 @@ namespace WebNews.Areas.Panel.Controllers
         private bool CommentExists(int id)
         {
             return _context.Comments.Any(e => e.Id == id);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            comment.IsApproved = true;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(NewsComments), new { id = comment.NewsId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(NewsComments), new { id = comment.NewsId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AnswerComment(string answer, int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            comment.IsApproved = true;
+            _context.Comments.Attach(comment);
+            CommentAnswer commentAnswer = new CommentAnswer
+            {
+                Body = answer,
+                PublishedDate = DateTime.Now,
+                Comment = comment,
+                CommentId = comment.Id,
+                Name = "Admin",
+            };
+            await _context.CommentAnswers.AddAsync(commentAnswer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(NewsComments), new { id = comment.NewsId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnapproveComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            comment.IsApproved = false;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(NewsComments), new { id = comment.NewsId });
+        }
+
+
+        [Route("[Area]/[Controller]/[Action]/{id}")]
+        public async Task<IActionResult> DeleteCommentFromDashboard(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment == null) return NoContent();
+            _context.Remove(comment);
+            await _context.SaveChangesAsync();
+            return StatusCode(200);
+        }
+
+
+        [Route("[Area]/[Controller]/[Action]/{id}")]
+        public async Task<IActionResult> ApproveCommentFromDashboard(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment == null) return NoContent();
+            comment.IsApproved = true;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            return StatusCode(200);
+        }
+
+
+        [Route("[Area]/[Controller]/[Action]/{id}")]
+        public async Task<IActionResult> UnapproveCommentFromDashboard(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment == null) return NoContent();
+            comment.IsApproved = false;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            return StatusCode(200);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCommentDetails(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            ViewData["Info"] = "Comment deleted";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnapproveCommentDetails(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            comment.IsApproved = false;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            ViewData["Info"] = "Comment status changed to Unapproved";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveCommentDetails(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            comment.IsApproved = true;
+            _context.Comments.Attach(comment);
+            await _context.SaveChangesAsync();
+            ViewData["Info"] = "Comment status changed to Approved";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

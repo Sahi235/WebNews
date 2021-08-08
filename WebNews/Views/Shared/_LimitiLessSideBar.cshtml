@@ -18,7 +18,7 @@
 
 
     <li class="nav-item nav-item-submenu">
-        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>News</span></a>
+        <a href="#" class="nav-link"><i class="icon-newspaper2"></i> <span>News</span></a>
 
         <ul class="nav nav-group-sub" data-submenu-title="Layouts">
             <li class="nav-item"><a asp-action="ListIndex" asp-controller="News" asp-area="Panel" class="nav-link">List Table List</a></li>
@@ -28,7 +28,7 @@
     </li>
 
     <li class="nav-item nav-item-submenu">
-        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Galleries</span></a>
+        <a href="#" class="nav-link"><i class="icon-gallery"></i> <span>Galleries</span></a>
 
         <ul class="nav nav-group-sub" data-submenu-title="Layouts">
             <li class="nav-item"><a asp-action="listindex" asp-controller="Galleries" asp-area="Panel" class="nav-link">Table List</a></li>
@@ -37,23 +37,33 @@
         </ul>
     </li>
     <li class="nav-item nav-item-submenu">
-        <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Articles</span></a>
+        <a href="#" class="nav-link"><i class="icon-book"></i> <span>Articles</span></a>
 
         <ul class="nav nav-group-sub" data-submenu-title="Layouts">
             <li class="nav-item"><a asp-action="ListIndex" asp-controller="Articles" asp-area="Panel" class="nav-link">Table List</a></li>
             <li class="nav-item">
-            <a asp-action="CardIndex" asp-controller="Articles" asp-area="Panel" class="nav-link">Card List</a></li>
+                <a asp-action="CardIndex" asp-controller="Articles" asp-area="Panel" class="nav-link">Card List</a>
+            </li>
             <li class="nav-item"><a asp-action="Create" asp-controller="Articles" asp-area="Panel" class="nav-link">Create Artices</a></li>
             <li class="nav-item"><a asp-action="Create" asp-controller="Articles" asp-area="Panel" class="nav-link">Incoming Articles</a></li>
         </ul>
     </li>
 
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-comment-discussion"></i> <span>Comments</span></a>
 
+        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+            <li class="nav-item"><a asp-action="Index" asp-controller="Commments" asp-area="Panel" class="nav-link">All Comments</a></li>
+            <li class="nav-item"><a asp-action="List" asp-controller="Users" asp-area="Panel" class="nav-link">Approved Comments</a></li>
+            <li class="nav-item"><a asp-action="" asp-controller="Users" asp-area="Panel" class="nav-link">Unapproved Comments</a></li>
+            <li class="nav-item"><a asp-action="List" asp-controller="Users" asp-area="Panel" class="nav-link">Comments Settings</a></li>
+        </ul>
+    </li>
 
 
 
     <li class="nav-item nav-item-submenu">
-        <a href="#" class="nav-link"><i class="icon-stack2"></i> <span>Sections</span></a>
+        <a href="#" class="nav-link"><i class="icon-section"></i> <span>Sections</span></a>
 
         <ul class="nav nav-group-sub" data-submenu-title="Page layouts">
 
@@ -73,4 +83,36 @@
 
         </ul>
     </li>
+
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-accessibility"></i> <span>Authentications</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Page layouts">
+
+            <li class="nav-item nav-item-submenu">
+                <a href="layout_fixed_sidebar_custom.html" class="nav-link">Users</a>
+                <ul class="nav nav-group-sub">
+                    <li class="nav-item"><a asp-action="Index" asp-controller="Users" asp-area="Panel" class="nav-link">Index</a></li>
+                    <li class="nav-item"><a asp-action="List" asp-controller="Users" asp-area="Panel" class="nav-link">List</a></li>
+                </ul>
+            </li>
+            <li class="nav-item nav-item-submenu">
+                <a href="layout_fixed_sidebar_custom.html" class="nav-link">Roles</a>
+                <ul class="nav nav-group-sub">
+                    <li class="nav-item"><a asp-action="RolesList" asp-controller="Roles" asp-area="Panel" class="nav-link">List</a></li>
+                    <li class="nav-item"><a asp-action="CreateRole" asp-controller="Roles" asp-area="Panel" class="nav-link">Create</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    <li class="nav-item nav-item-submenu">
+        <a href="#" class="nav-link"><i class="icon-users2"></i> <span>Users</span></a>
+
+        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+            <li class="nav-item"><a asp-action="Index" asp-controller="Users" asp-area="Panel" class="nav-link">Index</a></li>
+            <li class="nav-item"><a asp-action="List" asp-controller="Users" asp-area="Panel" class="nav-link">List</a></li>
+        </ul>
+    </li>
+
 </ul>

@@ -1,0 +1,22 @@
+﻿@model List<News>; 
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+</head>
+<body>
+
+	@foreach (var item in Model)
+	{
+		 <h1>@item.Title</h1>
+		 <hr />
+	}
+</body>
+</html>
+

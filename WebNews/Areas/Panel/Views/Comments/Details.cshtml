@@ -5,51 +5,80 @@
     Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Comment</h4>
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <h5 class="card-title">Basic form inputs</h5>
+        <div class="header-elements">
+            <div class="list-icons">
+                <a class="list-icons-item" data-action="collapse"></a>
+                <a class="list-icons-item" data-action="reload"></a>
+                <a class="list-icons-item" data-action="remove"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        @if (Model.IsApproved == false)
+        {
+            <form style="display: inline" id="orm-comment-approve" asp-action="ApproveCommentDetails" asp-controller="Comments" asp-area="Panel" asp-route-id="@Model.Id" method="post">
+                <input hidden value="@Model.Id" />
+                <button type="submit" class="btn btn-success">
+                    Approve
+                </button>
+            </form>
+            @*<a href="javascript:{}" onclick="document.getElementById('form-comment-approve').submit();" class="btn btn-success">Approve</a>*@
+        }
+        else
+        {
+            <form style="display: inline" id="form-comment-Unapprove" asp-action="UnapproveCommentDetails" asp-controller="Comments" asp-area="Panel" asp-route-id="@Model.Id" method="post">
+                <input hidden value="@Model.Id" />
+                <button type="submit" class="btn btn-warning">
+                    Unapprove
+                </button>
+            </form>
+            @*<a href="javascript:{}" onclick="document.getElementById('orm-comment-Unapprove').submit();" class="btn btn-warning">Unapprove</a>*@
+        }
+
+        <a href="javascript:{}" onclick="document.getElementById('form-comment-remove').submit();" class="btn btn-danger">Remove</a>
+    </div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PublishedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsApproved)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsApproved)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.News)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.News.SeoUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Video)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Video.Id)
-        </dd>
-    </dl>
+
+    <form id="form-comment-remove" asp-action="DeleteCommentDetails" asp-area="Panel" asp-controller="Comments" asp-route-id="@Model.Id" method="post">
+        <input hidden value="@Model.Id" />
+    </form>
+    <div class="form-group row">
+        <label class="col-form-label col-lg-2">Author</label>
+        <div class="col-lg-10">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-feedback form-group-feedback-left">
+                        <input type="text" disabled class="form-control form-control-lg" value="@Model.Name" placeholder="@Model.Name">
+                        <div class="form-control-feedback form-control-feedback-lg">
+                            <i class="icon-user"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-feedback form-group-feedback-left">
+                        <input type="text" disabled class="form-control form-control-lg" value="@Model.Email" placeholder="@Model.Email">
+                        <div class="form-control-feedback form-control-feedback-lg">
+                            <i class="icon-mailbox"></i>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div class="container"><textarea rows="8" cols="20" disabled class="form-control" placeholder="@Model.Description"></textarea></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+
 </div>

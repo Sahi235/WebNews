@@ -1,0 +1,64 @@
+﻿@model List<Email>;
+@{
+    Layout = null;
+}
+
+<li class="nav-item dropdown">
+    <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+        <i class="icon-bubbles4"></i>
+        <span class="d-md-none ml-2">Messages</span>
+        @if (Model.Where(c => c.IsRead == false).Any())
+        {
+            <span class="badge badge-pill bg-warning-400 ml-auto ml-md-0">@Model.Where(c => c.IsRead == false).Count()</span>
+        }
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+        <div class="dropdown-content-header">
+            <span class="font-weight-semibold">Messages</span>
+            <a asp-action="Compose" asp-controller="Emails" asp-area="Panel" class="text-default"><i class="icon-compose"></i></a>
+        </div>
+
+        <div class="dropdown-content-body dropdown-scrollable">
+            <ul class="media-list">
+                @foreach (var email in Model)
+                {
+                    <li class="media">
+                        <div class="mr-3 position-relative">
+                            @if (email.Sender.ImageUrl != null)
+                            {
+                                <img src="~/images/UsersProfile/@email.Sender.ImageUrl" width="36" height="36" class="rounded-circle" alt="@email.Sender.UserName">
+                            }
+                            else
+                            {
+                                <img src="~/LimitlessAssets/global_assets/images/placeholders/placeholder.jpg" width="36" height="36" class="rounded-circle" alt="@email.Sender.UserName">
+                            }
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-title">
+                                <a href="#">
+                                    <span class="font-weight-semibold">@email.Sender.UserName</span>
+                                    <span class="text-muted float-right font-size-sm">@email.SentDate.Humanize()</span>
+                                </a>
+                            </div>
+
+                            @if (email.Body.Length > 50)
+                            {
+                                <a asp-action="Details" asp-controller="Emails" asp-area="Panel" asp-route-id="@email.Id"><span class="text-muted">@Html.Raw(email.Body.Substring(0, 50))</span></a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-controller="Emails" asp-area="Panel" asp-route-id="@email.Id"><span class="text-muted">@Html.Raw(email.Body)</span></a>
+                            }
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="dropdown-content-footer justify-content-center p-0">
+            <a asp-action="Inbox" asp-controller="Emails" asp-area="Panel" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="Inbox"><i class="icon-menu7 d-block top-0"></i></a>
+        </div>
+    </div>
+</li>

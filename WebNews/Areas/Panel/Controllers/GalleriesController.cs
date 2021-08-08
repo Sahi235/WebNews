@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,18 @@ namespace WebNews.Areas.Panel.Controllers
     {
         private readonly DatabaseContext _context;
         private readonly IImageHandler _imageHandler;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ISeoUrlEditor seoUrlEditor;
 
         public GalleriesController(DatabaseContext context,
-                                   IImageHandler imageHandler)
+                                   IImageHandler imageHandler,
+                                   UserManager<ApplicationUser> userManager,
+                                   ISeoUrlEditor seoUrlEditor)
         {
             _context = context;
             _imageHandler = imageHandler;
-
+            this.userManager = userManager;
+            this.seoUrlEditor = seoUrlEditor;
         }
 
         public IActionResult Index()
@@ -89,7 +95,7 @@ namespace WebNews.Areas.Panel.Controllers
             ViewData["Categories"] = new MultiSelectList(await _context.Categories.ToListAsync(), "Id", "Name", categoryId);
             if (ModelState.IsValid)
             {
-                gallery.SeoUrl = gallery.SeoUrl.Replace(" ", "-").Replace("?", "-");
+                gallery.SeoUrl = seoUrlEditor.FixSeoUrl(gallery.SeoUrl);
                 if (mainImage == null) return View();
                 string extension = null;
                 string fileName = null;
@@ -167,7 +173,9 @@ namespace WebNews.Areas.Panel.Controllers
                         }
                     }
                 }
-
+                var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                gallery.User = user;
+                gallery.UserId = user.Id;
                 await _context.AddAsync(gallery);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ListIndex));
@@ -337,6 +345,10 @@ namespace WebNews.Areas.Panel.Controllers
                             existingGallery.Categories.Add(galleryCategory);
                         }
                     }
+                    var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                    existingGallery.IsModified = true;
+                    existingGallery.Modifier = user;
+                    existingGallery.ModifierId = user.Id;
                     _context.Update(existingGallery);
                     await _context.SaveChangesAsync();
                 }

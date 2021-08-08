@@ -1,20 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReflectionIT.Mvc.Paging;
-using WebNews.Data;
-using WebNews.Models;
-using WebNews.Utilities;
+using WebNews.Installers;
 
 namespace WebNews
 {
@@ -28,45 +19,17 @@ namespace WebNews
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryCache();
 
+            var installers = typeof(Startup).Assembly.ExportedTypes.Where(c => typeof(IInstaller).IsAssignableFrom(c) && !c.IsInterface && !c.IsAbstract).Select(Activator.CreateInstance).Cast<IInstaller>().ToList();
+            installers.ForEach(installer => installer.InstallService(services, config));
+
+
+            services.AddMvc(option =>
+            {
+                option.EnableEndpointRouting = false;
+            });
             services.AddControllersWithViews();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            services.AddMvc(option => option.EnableEndpointRouting = false);
-
-
-            services.AddDbContext<DatabaseContext>(option => 
-            {
-                option.UseSqlServer(config.GetConnectionString("DefaultConnection"), opt => 
-                {
-                    opt.EnableRetryOnFailure(2);
-                    opt.MaxBatchSize(500);
-                });
-            });
-
-
-
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<DatabaseContext>()
-                .AddDefaultTokenProviders();
-
-
-            services.AddTransient<IImageHandler, ImageHandler>();
-            services.AddTransient<IImageWriter, ImageWriter>();
-
-            services.AddPaging(options =>
-            {
-                options.ViewName = "Bootstrap4";
-                options.HtmlIndicatorDown = "<span>&darr;</span>";
-                options.HtmlIndicatorUp = " <span>&uarr;</span>";
-            });
-            services.AddMiniProfiler(c =>
-            {
-                c.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomRight;
-                c.PopupShowTimeWithChildren = true;
-                c.UserIdProvider = (request) => request.HttpContext.User.Identity.Name;
-            }).AddEntityFramework();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -76,9 +39,12 @@ namespace WebNews
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseResponseCompression();
+            app.UseRequestLocalization();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            //app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseMiniProfiler();
             app.UseMvc(routes =>
             {

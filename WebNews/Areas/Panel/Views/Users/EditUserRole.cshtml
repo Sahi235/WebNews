@@ -1,0 +1,37 @@
+﻿@model WebNews.Areas.Panel.ViewModels.Users.EditUserRoleVM;
+
+@{
+    ViewData["Title"] = "EditUserRole";
+    Layout = "~/Views/Shared/_LimitlessLayout.cshtml";
+}
+
+
+
+<form method="post" asp-action="EditUserRole" asp-controller="Users" asp-area="Panel">
+    <div class="card">
+        <div class="card-header">
+            <h2>Manage User Roles</h2>
+        </div>
+        <input hidden asp-for="@Model.User.UserName" value="@Model.User.UserName" />
+        <div class="card-body">
+            @for (int i = 0; i < Model.UserRoles.Count; i++)
+            {
+                <div class="form-check m-1">
+                    <input type="hidden" asp-for="@Model.UserRoles[i].RoleId" />
+                    <input type="hidden" asp-for="@Model.UserRoles[i].RoleName" />
+                    <input asp-for="@Model.UserRoles[i].InRole" class="form-check-input" />
+                    <label class="form-check-label" asp-for="@Model.UserRoles[i].InRole">
+                        @Model.UserRoles[i].RoleName
+                    </label>
+                </div>
+            }
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" value="Update" class="btn btn-primary"
+                   style="width:auto" />
+            <a asp-action="Profile" asp-route-userName="@Model.User.UserName"
+               class="btn btn-primary" style="width:auto">Cancel</a>
+        </div>
+    </div>
+</form>

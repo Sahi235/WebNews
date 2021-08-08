@@ -7,8 +7,7 @@
 
 @section css{
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-
-
+    <link href="~/Atlantis/css/atlantis.min.css" rel="stylesheet">
     <script src="~/LimitlessAssets/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
     <script src="~/LimitlessAssets/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
     <script src="~/LimitlessAssets/global_assets/js/demo_pages/editor_summernote.js"></script>
@@ -31,6 +30,9 @@
     <script src="~/LimitlessAssets/global_assets/js/plugins/uploaders/fileinput/plugins/purify.min.js"></script>
     <script src="~/LimitlessAssets/global_assets/js/plugins/uploaders/fileinput/plugins/sortable.min.js"></script>
     <script src="~/LimitlessAssets/global_assets/js/plugins/uploaders/fileinput/fileinput.min.js"></script>
+
+
+
 
 
 }
@@ -131,6 +133,23 @@
                 <div class="col-lg-10">
                     <input name="images" type="file" class="file-input" multiple="multiple" data-fouc>
                     <span class="form-text text-muted">You can add a slider to this news,<code>It will be shown at the bottom of the news</code>.</span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label class="form-label">Delete image</label>
+                <div class="row">
+                    @foreach (var item in Model.Image)
+                    {
+                        <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                                <input name="imagecheck" type="checkbox" value="@item.Id" class="imagecheck-input">
+                                <figure class="imagecheck-figure">
+                                    <img src="~/images/News/@item.ImageUrl" alt="title" class="imagecheck-image">
+                                </figure>
+                            </label>
+                        </div>
+                    }
                 </div>
             </div>
             <br />
